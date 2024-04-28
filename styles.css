@@ -1,0 +1,214 @@
+:root {
+    /* Define CSS variables for gradient colors */
+    --gradient-color-start: #1d1d1d; /* Dark grey */
+    --gradient-color-end: #000; /* Black */
+    font-family: Arial, Helvetica, sans-serif;
+}
+body, html {
+    height: 100%; /* Subtract 40px for top and bottom margins */
+    margin: 0; /* Margin added to all sides */
+    padding: 0;
+    background-color: var(--gradient-color-start);
+    background-image: linear-gradient(to bottom, var(--gradient-color-start), var(--gradient-color-end));
+}
+/* Styles for mobile devices */
+.container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .left-column,
+  .middle-column,
+  .right-column {
+    width: 100%;
+  }
+@media screen and (min-width: 1000px) {
+        .container {
+        flex-direction: row;
+        }
+    
+        .left-column,
+        .middle-column,
+        .right-column {
+        width: auto;
+        flex:1
+        }
+    
+    .container {
+        display: flex;
+        height: 100%;
+    }
+}
+.heading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid rgb(255, 255, 255);
+    height: 40px; /* Adjust the height as needed */
+    font-size: xx-large;
+}
+.left-column, .middle-column, .right-column {
+    flex: 1;
+    color: white;
+    border: 2px solid rgb(200, 200, 200);
+}
+.middle-column{
+    flex:1.75;
+}
+
+.right-column, .middle-column {
+    display: flex;
+    flex-direction: column;
+}
+.right-column-top{
+    background-image: linear-gradient(to bottom, var(--gradient-color-start), var(--gradient-color-end));
+}
+.right-column-top, .right-column-bottom {
+    flex: 1;
+    border: 2px solid rgb(200, 200, 200);
+}
+/*Styles for the padding at the bottom*/
+.padding {
+    flex:2 !important;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    padding: 5%;
+}
+.padding > img {
+    margin: 5%;
+    width: 20%; 
+    aspect-ratio: 1/1;
+}
+/* styles for the equipbox */
+.middle-column > div{
+        display:flex;
+        flex:1;
+        flex-direction: row;
+        border-top: 2px solid rgb(200, 200, 200);
+}
+.equipWeap > div {
+    display: flex;
+    flex-direction: column;
+}
+.middle-column > div .icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 1/1;
+    flex:0.5;
+    border: 8px dashed rgb(100, 100, 100);
+}
+.middle-column > div .decos{
+    flex:2;
+}
+.skills, .stats{
+    display: flex;
+    flex:1;
+    padding: 1%;
+}
+.middle-column > div .skills > .name{
+    font-size: 140%;
+    padding: 2px;
+    border: 3px solid rgb(82, 82, 82);  
+    background-image: linear-gradient(to bottom, rgb(100, 100, 100), black);
+}
+.middle-column > div .skills > .skills-list{
+    display: flex;
+    border: 3px solid darkslategrey;
+    flex:1;
+    flex-direction: column;
+    justify-items: right;
+    align-items: left;
+    flex:1
+}
+.armor-skill{
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    border: 3px solid darkslategrey;
+    background-image:linear-gradient(to bottom, darkslategrey, Black)
+}
+.armorSkill-level{
+    display:flex;
+    justify-content: right;
+    flex:1
+}
+/* Styles for the weapon box */
+.middle-column > div .stats, .middle-column > div .skills{
+    flex: 2;
+    flex-direction: column;
+}
+.middle-column > div .stats > .name{
+    display: flex;
+    font-size: 180%;
+    flex-direction: row;
+    border: 3px solid rgb(82, 82, 82); 
+    background-image: linear-gradient(to bottom, rgb(100, 100, 100), rgb(20, 20, 20));
+    flex: 1;
+    padding: 2px;
+}
+.middle-column > div .stats > div *{
+    align-items: center;
+    font-size: large;
+    padding: 2px;
+}
+.middle-column > div .stats > div > div{
+    display: flex;
+    flex-direction: row;
+    border: 3px solid darkslategrey; 
+    flex: 1;
+}
+.middle-column > div .stats > div > div > div{
+    display: flex;
+    flex: 1;
+}
+.weapon-stats{
+    display: flex;
+}
+
+/* Styles for the talismans */
+.talisman > .decos {
+    display:flex;
+    flex-direction:column;
+    margin-top:5px;
+    margin-bottom:5px;
+}
+.talisman > .decos > div{
+    display:flex;
+    flex: 1;
+    /* border: 1px solid red; */
+    flex-direction:row;
+}
+.decoIcon{
+    border: 4px dashed rgb(54, 47, 79);
+}
+.deco-skill{
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    border: 3px solid rgb(54, 47, 79);
+    background-image:linear-gradient(to bottom, rgb(54, 47, 79), Black)
+}
+
+/* STYLES for the Left Column - Skills Display */
+.skills-display{
+    display:flex;
+    flex-direction:column;
+}
+.skills-display > .total-skill{
+    display: flex;
+    align-items: center;
+    font-size: x-large;
+    flex-direction: row;
+    border: 3px solid rgb(79, 57, 47);
+    background-image:linear-gradient(to bottom, rgb(79, 57, 47), Black);
+    height: 50px !important;
+}
+.maxSkill > .armorSkill-level{
+    color: orange;
+}
+.stat-box{
+    display:flex;
+    flex-direction:row;
+}

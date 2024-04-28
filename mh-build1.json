@@ -1,0 +1,100 @@
+{
+    "weapon":{
+        "type":"ChargeBlade",
+        "name":"Hyperguard I",
+        "rarity":1,
+        "defenseBoost":0,
+        "attack":80,
+        "sharpness":"300",
+        "affinity":0,
+        "element":0,
+        "phialType":"Impact Phial",
+        "rampageSlots":1,
+        "rampageSkills":["Attack Boost I", "Affinity Boost I", "Defense Boost II"],
+        "decorations": [["", 0]]
+    },
+    "armor":{
+        "head": {
+            "name": "Kamura Head Scarf",
+            "rarity": 1,
+            "defense": {
+                "raw": 1,
+                "fire": 0,
+                "water": 0,
+                "thunder": 0,
+                "ice": 0,
+                "dragon": 0
+            },
+            "skills": [["Divine Blessing", 1]],
+            "slots": [0,0,0],
+            "decorations": [["", 0]]
+        },
+        "chest": {
+            "name": "Kamura Garb",
+            "rarity": 1,
+            "defense": {
+                "raw": 1,
+                "fire": 0,
+                "water": 0,
+                "thunder": 0,
+                "ice": 0,
+                "dragon": 0
+            },
+            "skills": [["Attack Boost", 2]],
+            "slots": [0,0,0],
+            "decorations": [["", 0]]
+        },
+        "arms": {
+            "name": "Kamura Braces",
+            "rarity": 1,
+            "defense": {
+                "raw": 1,
+                "fire": 0,
+                "water": 0,
+                "thunder": 0,
+                "ice": 0,
+                "dragon": 0
+            },
+            "skills": [["Heroics", 1]],
+            "slots": [0,0,0],
+            "decorations": [["", 0]]
+        },
+        "waist": {
+            "name": "Kamura Obi",
+            "rarity": 1,
+            "defense": {
+                "raw": 1,
+                "fire": 0,
+                "water": 0,
+                "thunder": 0,
+                "ice": 0,
+                "dragon": 0
+            },
+            "skills": [["Critical Eye", 1]],
+            "slots": [0,0,0],
+            "decorations": [["", 0]]
+        },
+        "legs": {
+            "name": "Kamura Leggings",
+            "rarity": 1,
+            "defense": {
+                "raw": 1,
+                "fire": 0,
+                "water": 0,
+                "thunder": 0,
+                "ice": 0,
+                "dragon": 0
+            },
+            "skills": [["Wall Runner", 1]],
+            "slots": [0,0,0],
+            "decorations": [["", 0]]
+        }
+    },
+    "talisman":{
+        "name":"Discipline Talisman",
+        "rarity":9,
+        "skills":[["Critical Eye", 5]],
+        "slots":[2, 0, 0],
+        "decorations": [["Critical Eye", 1, 2]]
+    }
+}
