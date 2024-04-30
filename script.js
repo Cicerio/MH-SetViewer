@@ -13,14 +13,6 @@ fetch(jsonFilePath)
     return response.json();
   })
   .then(jsonData => {
-    // Access and use the JSON data
-    /* 
-      read json file
-        have a for loop reading each value
-        decide what to record based on value
-      skills display
-          write flexboxes with names/values of skills
-      */
      /**
       * doIconCheck loads the icons of the equipment on the page.
       */
@@ -43,7 +35,7 @@ fetch(jsonFilePath)
           img.src = "icons/MH-Icons/Weapons/" + 
                     jsonData.weapon.type + 
                     "-Rarity-" + 
-                    jsonData.weapon.rarity + ".png";
+                    jsonData.weapon.rarity + ".svg";
         } else if(count >= 1 && count <= 5){
            img.src = "icons/MH-Icons/Armor/" + 
                     armorKeys[count-1] + 
