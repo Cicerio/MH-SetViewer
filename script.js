@@ -18,7 +18,7 @@ fetch(jsonFilePath)
       */
      let armorKeys = Object.keys(jsonData.armor);
     /**
-     * A description of the entire function.
+     * Loads icons on the page
      *
      * @param {type} paramName - description of parameter
      * @return {type} description of return value

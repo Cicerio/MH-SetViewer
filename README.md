@@ -1,18 +1,8 @@
-# MH-SetViewer
-A small website for a monster hunter build viewer based on JSON files.
+# React + Vite
 
-Right now, it only has the capabilities to view properly written JSON files.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Originally a small school project, I'mma try to get this properly working.
-TODO:
+Currently, two official plugins are available:
 
-Write a boilerplate JSON file
-
-Maybe add a set creator, requiring a database of armors 
-Add support for Sunbreak armors, 
-    Maybe even have a Sunbreak-Iceborne mode swapping
-Mobile-first UI, RESPONSIVE ui
-    rework the right column  
-    do proper sharpness values (learn how they work)
-
-    Have an icon swapper (World-Rise)
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
