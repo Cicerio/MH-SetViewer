@@ -2,14 +2,13 @@ import { useState } from 'react'
 import LoadBuild from './components/LoadBuild'
 import './styles.css'
 
-LoadBuild();
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <div className="container">
         <div className="left-column">
             <div className="heading">Skills</div>
+            <LoadBuild />
             <div className="skills-display">
             </div>
         </div>

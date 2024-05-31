@@ -1,24 +1,17 @@
-
+import React, { useEffect, useState } from 'react';
+import data from './mh-build1.json'
 export default function LoadBuild(){
+  const [jsonData, setJsonData] = useState(data);
   /**
- * Loads the webpage, and reads the build JSON file
+ * Loads the webpage, and reads the bu  ild JSON file
  */
-// Define the path to the JSON file
-const jsonFilePath = 'mh-build1.json';
 
-// Fetch the JSON file asynchronously
-fetch(jsonFilePath)
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    return response.json();
-  })
-  .then(jsonData => {
-     /**
-      * doIconCheck loads the icons of the equipment on the page.
-      */
-     let armorKeys = Object.keys(jsonData.armor);
+useEffect(() => {
+  if(jsonData){
+    /**
+         * doIconCheck loads the icons of the equipment on the page.
+         */
+    let armorKeys = Object.keys(jsonData.armor);
     /**
      * Loads icons on the page
      *
@@ -39,7 +32,7 @@ fetch(jsonFilePath)
                     "-Rarity-" + 
                     jsonData.weapon.rarity + ".svg";
         } else if(count >= 1 && count <= 5){
-           img.src = "icons/MH-Icons/Armor/" + 
+          img.src = "icons/MH-Icons/Armor/" + 
                     armorKeys[count-1] + 
                     "-Rarity-" + 
                     jsonData.armor.head.rarity + ".png";
@@ -59,16 +52,15 @@ fetch(jsonFilePath)
         count++;
       });
     }
-    /**
-     * A description of the entire function.
-     *
-     * @param {type} paramName - description of parameter
-     * @return {type} description of return value
-     */
+  /**
+   * Fills the weapon statistics on the webpage with the values from the jsonData object.
+   *
+   * @return {void} This function does not return anything.
+   */
     function fillWeapStats(){
       let weapName = document.querySelector(".equipWeap > .stats > .name"),
           attack = document.querySelector(".attack-num"),
-          affinity = document.querySelector(".affinity-num");
+          affinity = document.querySelector(".affinity-num"),
           element = document.querySelector(".element-num");
       
       // Set stat values
@@ -76,7 +68,7 @@ fetch(jsonFilePath)
       attack.innerHTML = jsonData.weapon.attack;
       affinity.innerHTML = jsonData.weapon.affinity;
       element.innerHTML = "Elm: " + jsonData.weapon.element;
-
+  
       // set and display decoration values
       /* TODO: Add deco slots for weapons and armor */
     }
@@ -112,7 +104,7 @@ fetch(jsonFilePath)
       // If the search string is not found, return null
       return null;
     }
-
+  
     doIconCheck();
     fillWeapStats();
     
@@ -123,14 +115,14 @@ fetch(jsonFilePath)
       let name = document.querySelector("."+armorKey+" > .skills > .name");
       name.innerHTML = armorItem.name;
       armorItem.skills.forEach(skill => {
-        skillsList = document.querySelector("."+armorKey+" > .skills > .skills-list");
+        let skillsList = document.querySelector("."+armorKey+" > .skills > .skills-list");
         skillsList.appendChild(createSkillBox(skill));
       });
     }
-
+  
     // fill in talisman stats
     // adding the talisman name
-    talismanName = document.querySelector(".talisman > .skills >.name");
+    let talismanName = document.querySelector(".talisman > .skills >.name");
     talismanName.innerHTML = jsonData.talisman.name;
     //filling in each skill 
     jsonData.talisman.skills.forEach(skill => {
@@ -140,22 +132,22 @@ fetch(jsonFilePath)
     //Filling in decorations
     let taliDecoCount = 1;
     jsonData.talisman.decorations.forEach(deco => {
-      decoSlot = document.querySelector(".talisman > .decos > .decoSlot" + taliDecoCount)
+      let decoSlot = document.querySelector(".talisman > .decos > .decoSlot" + taliDecoCount),
       decoIcon = document.createElement("div");
       decoIcon.className = "decoIcon";
       decoIcon.innerHTML = deco[2] + "-Slot";
-
-      decoSkill = createSkillBox(deco);
+  
+      let decoSkill = createSkillBox(deco);
       decoSkill.className = "deco-skill"
-
+  
       decoSlot.appendChild(decoIcon);
       decoSlot.appendChild(decoSkill);
       taliDecoCount++;
     })
     
-
+  
     // Calculating skills
-    skillsStorage = [];
+    let skillsStorage = [];
     /**
      * Traverses an object or array recursively and performs a manipulation on arrays with keys 'skills' or 'decorations'.
      *
@@ -198,7 +190,7 @@ fetch(jsonFilePath)
       }
     }
     traverse(jsonData);
-
+  
     // After gathering the skills, display them in the left column
     const sortedSkills = skillsStorage.sort((a, b) => b[1] - a[1]);
     console.log(skillsStorage);
@@ -217,14 +209,14 @@ fetch(jsonFilePath)
     /**
      * STATS CODING TIME
      */
-
+  
     let statBlock = document.querySelector(".statblock"),
         attackStat = 0,
         affinityStat = 0,
         elementStat = 0,
         // first is the raw, the other 5 are elemental defenses
         defenseStat = [0, 0, 0, 0, 0, 0];
-
+  
     //calculate skills into stats
     let critSkillNum = searchAndGetNumber(sortedSkills, "Critical Eye"),
         atkSkillNum = searchAndGetNumber(sortedSkills, "Attack Boost")
@@ -239,55 +231,59 @@ fetch(jsonFilePath)
     
     for (const armorKey of armorKeys) {
       const armorItem = jsonData.armor[armorKey];
-
+  
       defenseStat[0] += armorItem.defense.raw 
     }
     console.log("Defense: " + defenseStat[0]);
-
-    statTotal = [];
+  
+    let statTotal = [];
     statTotal.push( "Attack = " + attackStat);
     statTotal.push("Affinity = " + affinityStat + "%");
     statTotal.push("Element = " +elementStat);
     statTotal.push(defenseStat);
-
+  
     
     // Write the stats out in the statblock flexbox
     statTotal.forEach(stat => {
-      statBox = document.createElement("div")
+      let statBox = document.createElement("div")
       statBox.className = "stat-box";
       
       if(Array.isArray(stat)){
         statBox.innerHTML = "Defenses: \n"
-
+  
         statBox.innerHTML += "Raw: " + stat[0];
         statBlock.appendChild(statBox);
       }else{
-
+  
         statBox.innerHTML = stat;
         statBlock.appendChild(statBox)
       }
     });
-
-
+  
+  
     // list all the rarities through the json file.
-    rarityArray = [];
+    let rarityArray = [];
     rarityArray.push(jsonData.weapon.rarity);
     for (const armorKey of armorKeys) {
       const armorItem = jsonData.armor[armorKey];
       rarityArray.push(armorItem.rarity);
     }
     rarityArray.push(jsonData.talisman.rarity);
-
+  
     console.log(rarityArray);
-    rarityBlock = document.createElement("div");
+    let rarityBlock = document.createElement("div");
     rarityBlock.innerHTML = "Rarities of Equipment in order: "
     rarityArray.forEach(element => {
       rarityBlock.innerHTML += element + " ";
     });
     statBlock.appendChild(rarityBlock);
+  } else {
+   console.error('Error fetching JSON file:', error);
+  }
+  }, []);
 
-  })
-  .catch(error => {
-    console.error('Error fetching JSON file:', error);
-  });
+
+
+  // Return blank, this component just runs code, doesn't display anything
+  return <></>;
 }
