@@ -8,9 +8,6 @@ export default function LoadBuild(){
 
 useEffect(() => {
   if(jsonData){
-    /**
-         * doIconCheck loads the icons of the equipment on the page.
-         */
     let armorKeys = Object.keys(jsonData.armor);
     /**
      * Loads icons on the page
