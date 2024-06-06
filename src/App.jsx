@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import LoadBuild from './components/LoadBuild'
-import './styles.css'
+import './css/styles.css'
 
 function App() {
 

@@ -22,3 +22,16 @@ TODO:
     do proper sharpness values (learn how they work)
 
     Have an icon swapper (World-Rise)
+
+
+THE PLAN:
+
+
+  I want this app to select from a list of armor and weapons,
+
+  Be able to attach a set to an equip loadout page selection thing
+
+  Then I want it able to be saved/loaded via json file
+  Screenshot too
+  Minimum Viable Product.
+

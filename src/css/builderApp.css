@@ -1,0 +1,59 @@
+:root{
+  /* MAIN COLOR PALETTE: */
+  /* https://coolors.co/200d45-523787-7e1120-d45e77-f69ded-efe9e7-d9a939 */
+  --russian-violet: #200d45ff;
+  --tekhelet: #523787ff;
+  --burgundy: #7e1120ff;
+  --blush: #d45e77ff;
+  --plum-web: #f69dedff;
+  --isabelline: #efe9e7ff;
+  --goldenrod: #d9a939ff;
+  background-color: var(--russian-violet);
+  color:var(--isabelline);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+#root{
+  height:100vh;
+  justify-items: center;
+}
+body{
+  height:100vh;
+  margin:auto;
+  overflow-x:hidden;
+}
+section.body{
+  display:flex;
+  flex-direction: column;
+  
+  height:100%;
+  padding: 8px;
+    width: 100vw;
+    min-width: 420px;
+    height: -moz-max-content;
+    height: max-content;
+    padding-top: calc(2.4em + 24px);
+    padding-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+main{
+  display:flex;
+  flex-direction: column;
+  width:100vw;
+  align-items: center;
+}
+.gearView{
+  text-align: center;
+    z-index: 0;
+    width: 1200px;
+    max-width: 98%;
+}
+div.gear{
+  box-shadow: 2px 0px 3px lightgray;
+  background-color: var(--tekhelet);
+  padding:1%;
+}
+.emphasis{
+  color: var(--goldenrod);
+}

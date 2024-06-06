@@ -5,6 +5,7 @@
   --gradient-color-end: #000;
   /* Black */
   font-family: Arial, Helvetica, sans-serif;
+  color:white;
 }
 #root {
   height:100%;
