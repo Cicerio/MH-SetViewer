@@ -1,47 +1,65 @@
 import { useState } from "react";
 // import weaponData from "https://gist.githubusercontent.com/Cicerio/f008eaeb97f4c8e6b68418b72c4a9488/raw/df23cfb8220c1ec8ff707b0d0517924a0356beca/mhrice_charge-axe.json";
 import weaponData from '../../mhrice-charge_axe-data.json'
-import '../css/styles.css'
-function WeaponBlock() {
-  let jsonStructure = {
-    'W_ChargeAxe_000': {
-      weaponID: '08B00000',
-      enumName: 'W_ChargeAxe_000',
-      modelID: '08B00004',
-      modelName: 'C_Axe018',
-      sortID: '59',
-      weaponName: 'Hyperguard I'
-    }
-  };
-  let chargeAxeRef = true ? 0 : 1;
+import '../css/WeaponBlock.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-  let sortIDNum = 1
 
+function getWeaponIcon(type) {
+  switch (type) {
+    case 1:
+      return "icons/MH-Icons/Weapons/Greatsword-Rarity-1.png";
+    case 2:
+
+    case 3:
+
+    case 4:
+
+    case 5:
+
+    case 6:
+
+    case 7:
+
+    case 8:
+
+    case 9:
+
+    case 10: // Charge Blade
+      return "../../icons/MH-Icons/Weapons/ChargeBlade-Rarity-1.svg"
+    case 11:
+
+    case 12:
+
+    case 13:
+
+    case 14:
+
+  }
+}
+export default function WeaponBlock(props) {
+  /**
+   * Id/Name style:
+   * W_ChargeAxe_{ID}_{Name, Explain}
+   */
   return (
     <>
-      <div className="equipWeap">
-        <div className="icon"></div>
-        <div className="stats">
-          <div className="name"></div>
-          <div className="weapon-stats">
-            <div className="stat-attack">
-              <img src="icons/Stats/attack.png" alt="atkIcon"></img>
-              <div className="attack-num"></div>
-            </div>
-            <div className="stat-affinity">
-              <img src="icons/Stats/affinity.png" alt="affIcon"></img>
-              <div className="affinity-num"></div>
-            </div>
-            <div className="stat-element">
-              <div className="element-num"></div>
-            </div>
+      <div className="gearItem-container">
+        <div className="item-container">
+          <div className="slot-icon">
+            <img alt="slot icon" src={getWeaponIcon(props.weapType)}></img>
           </div>
-        </div>
-        <div className="decos">
+          {props.name && (
+            <div className="selected-item">
+              {props.name}
+            </div>
+          )}
+          <button className="info-button">
+          <FontAwesomeIcon icon="fa-regular fa-grip-lines-vertical" />
+          </button>
+          <button className="clear-button"></button>
         </div>
       </div>
     </>
   );
 }
-
-export default WeaponBlock;

@@ -1,11 +1,31 @@
 import './css/builderApp.css'
 import { useState, useEffect } from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-export default function BuilderApp() {
-  const [selectedTab, setSelectedTab] = useState(0);
 
-  useEffect(() => {
+import WeaponBlock from './components/WeaponBlock';
+export default function BuilderApp() {
+  const [weaponID, setWeaponID] = useState(null);
+  const [selectedTab, setSelectedTab] = useState(0);
+  const [weaponData, setWeaponData] = useState(null);
+  const [baseWeaponData, setBaseWeaponData] = useState(null);
+  const [weaponName, setWeaponName] = useState('');
+  const [weaponType, setWeaponType] = useState(1);
+
+
+  useEffect(() => { //  Loading JSON weapon data
+    const fetchData = async () => { // fetching weapon data
+      try {
+        const response = await fetch('https://gist.githubusercontent.com/Cicerio/f008eaeb97f4c8e6b68418b72c4a9488/raw/1fa7d2f49cc499c9bd8569f0cff44b5435de359b/mhrice_charge-axe.json');
+        const jsonData = await response.json();
+        setWeaponData(jsonData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => { //for handling selected tabs
     const handleResize = () => {
       if (window.innerWidth >= 700) {
         setSelectedTab(2);
@@ -22,29 +42,63 @@ export default function BuilderApp() {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+  const handleTabClick = (index) => {
+    setSelectedTab(index);
+  };
   const isEquipmentSelected = selectedTab >= 0;
   const isStatsSelected = selectedTab >= 1;
   const isSkillsSelected = selectedTab >= 2;
+  useEffect(() => { // to handle weaponID change
+    setWeaponID("001");
+    setBaseWeaponData(weaponData ?
+      weaponData.charge_axe.base_data.param.find(obj => obj.base.base.base.base.id.ChargeAxe === weaponID) : null);
+    setWeaponName(weaponData ?
+      weaponData.charge_axe.name.entries.find(obj => obj.name === 'W_ChargeAxe_' + weaponID + '_Name')?.content[1] : null);
+    // Rest of your code...
+  }, [weaponData, weaponID]);
+
+console.log(weaponName);
+  if (!weaponData) {
+    return <div>Loading...</div>;
+  }
+
 
   return (
     <main className='container'>
       <div className='tab-container'>
-        <div className={`tab ${selectedTab >= 0 ? 'selected' : ''}`}>Equipment</div>
-        <div className={`tab ${selectedTab >= 1 ? 'selected' : ''}`}>Stats</div>
-        <div className={`tab ${selectedTab >= 2 ? 'selected' : ''}`}>Skills</div>
+      <div
+          className={`tab ${selectedTab === 0 ? 'selected' : ''}`}
+          onClick={() => handleTabClick(0)}
+        >
+          Equipment
+        </div>
+        <div
+          className={`tab ${selectedTab === 1 ? 'selected' : ''}`}
+          onClick={() => handleTabClick(1)}
+        >
+          Stats
+        </div>
+        <div
+          className={`tab ${selectedTab === 2 ? 'selected' : ''}`}
+          onClick={() => handleTabClick(2)}
+        >
+          Skills
+        </div>
       </div>
       {isEquipmentSelected && (
         <section className='gear-container'>
-          gear
+           <WeaponBlock weapType={weaponType} name={weaponName} ></WeaponBlock>
         </section>
       )}
       {isStatsSelected && (
         <section className='stats-container'>
-          <div className='container' >
+          <div className='equipped-stats' >
+            {/* maybe have these blocks be their own components */}
             <h4>Attack</h4>
             <div>
               <ul className='attack-stats striped'>
-                {/* maybe have these blocks be their own components */}
+                <li>Attack : { baseWeaponData ? baseWeaponData.base.base.base.atk : "N/A"}</li>
+                <li> oh oh me too</li>
               </ul>
             </div>
             <br />
@@ -54,10 +108,10 @@ export default function BuilderApp() {
           </div>
           {isSkillsSelected && (
             <section className='skills-container'>
-              <div className='container' >
+              <div className='equipped-skills' >
                 <br />
                 <h4>
-                  Skills 
+                  Skills
                 </h4>
               </div>
             </section>

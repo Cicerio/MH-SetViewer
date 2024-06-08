@@ -1,0 +1,40 @@
+.gearItem-container{
+  /* border: 1px dashed pink; */
+  border-radius: 3px;
+  width:auto;
+  margin-bottom: 10px;
+  display: grid;
+  grid-template-rows: 54px auto auto;
+  grid-gap: 4px;
+}
+.item-container{
+  height: 38px;
+  background-color: var(--russian-violet-lite);
+  cursor: pointer;
+  padding: 8px 4px;
+  border-radius: 3px;
+  display: grid;
+  grid-template-columns: 36px auto -webkit-min-content -webkit-min-content 28px;
+  grid-template-columns: 36px auto min-content min-content 28px;
+}
+.slot-icon{
+  grid-column: 1;
+  height: 38px;
+  line-height: 38px;
+}
+img{
+  height:24px;
+  vertical-align: middle;
+}
+.selected-item{
+  grid-column: 2;
+  line-height: 38px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 20px;
+}
+.choose-button{
+  grid-column: 3;
+  background-color: var(red);
+}

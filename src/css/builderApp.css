@@ -19,14 +19,18 @@
   height: 100vh;
   justify-items: center;
 }
-
+/* testing*/
+/* body * {
+  border: 1px dotted white
+} */
+/* end of testing */
 body {
   height: 100vh;
   margin: auto;
   overflow-x: hidden;
 }
 
-.container,
+main.container,
 .tab-container {
   position: absolute;
   top: 0;
@@ -55,7 +59,7 @@ main.container {
   margin: 6px;
   overflow: hidden;
 }
-.container {
+.equipped-stats {
   padding-top: 4px;
 }
 
@@ -74,10 +78,20 @@ main.container {
 
 }
 
-.gear-container {
+.gear-container,
+.stats-container {
+  position:absolute;
   top: 34px;
   grid-column: 1 / 4;
   margin-top: 8px;
+  width:100%;
+}
+button{
+  background: none;
+    border: none;
+    outline: none;
+    color: #969696;
+    cursor: pointer;
 }
 
 @media screen and (min-width: 700px) {
