@@ -34,7 +34,10 @@ img{
   text-overflow: ellipsis;
   font-size: 20px;
 }
-.choose-button{
+.info-button{
   grid-column: 3;
   background-color: var(red);
+}
+.clear-button{
+  grid-column: 4;
 }

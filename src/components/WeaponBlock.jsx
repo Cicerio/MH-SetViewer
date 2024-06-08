@@ -3,7 +3,8 @@ import { useState } from "react";
 import weaponData from '../../mhrice-charge_axe-data.json'
 import '../css/WeaponBlock.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
+import { faGripLinesVertical } from '@fortawesome/free-solid-svg-icons'
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 function getWeaponIcon(type) {
   switch (type) {
@@ -54,10 +55,12 @@ export default function WeaponBlock(props) {
               {props.name}
             </div>
           )}
-          <button className="info-button">
-          <FontAwesomeIcon icon="fa-regular fa-grip-lines-vertical" />
+          <button className="info-button" aria-label="info">
+            <FontAwesomeIcon icon={faGripLinesVertical} />
           </button>
-          <button className="clear-button"></button>
+          <button className="clear-button" aria-label="clear">
+            <FontAwesomeIcon icon={faXmark} />
+          </button>
         </div>
       </div>
     </>

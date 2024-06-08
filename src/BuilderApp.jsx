@@ -2,6 +2,7 @@ import './css/builderApp.css'
 import { useState, useEffect } from 'react';
 
 import WeaponBlock from './components/WeaponBlock';
+import ArmorBlock from './components/ArmorBlock';
 export default function BuilderApp() {
   const [weaponID, setWeaponID] = useState(null);
   const [selectedTab, setSelectedTab] = useState(0);
@@ -28,7 +29,7 @@ export default function BuilderApp() {
   useEffect(() => { //for handling selected tabs
     const handleResize = () => {
       if (window.innerWidth >= 700) {
-        setSelectedTab(2);
+        setSelectedTab(-1);
       } else {
         setSelectedTab(0);
       }
@@ -42,12 +43,7 @@ export default function BuilderApp() {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-  const handleTabClick = (index) => {
-    setSelectedTab(index);
-  };
-  const isEquipmentSelected = selectedTab >= 0;
-  const isStatsSelected = selectedTab >= 1;
-  const isSkillsSelected = selectedTab >= 2;
+
   useEffect(() => { // to handle weaponID change
     setWeaponID("001");
     setBaseWeaponData(weaponData ?
@@ -57,16 +53,23 @@ export default function BuilderApp() {
     // Rest of your code...
   }, [weaponData, weaponID]);
 
-console.log(weaponName);
+  const handleTabClick = (index) => {
+    setSelectedTab(index);
+  };
+
+  const isEquipmentSelected = selectedTab === 0;
+  const isStatsSelected = selectedTab === 1;
+  const isSkillsSelected = selectedTab === 2;
+  const isEverythingSelected = selectedTab === -1;
+
   if (!weaponData) {
     return <div>Loading...</div>;
   }
 
-
   return (
     <main className='container'>
       <div className='tab-container'>
-      <div
+        <div
           className={`tab ${selectedTab === 0 ? 'selected' : ''}`}
           onClick={() => handleTabClick(0)}
         >
@@ -85,19 +88,24 @@ console.log(weaponName);
           Skills
         </div>
       </div>
-      {isEquipmentSelected && (
+      {(isEquipmentSelected || isEverythingSelected) && (
         <section className='gear-container'>
-           <WeaponBlock weapType={weaponType} name={weaponName} ></WeaponBlock>
+          <WeaponBlock weapType={weaponType} name={weaponName} ></WeaponBlock>
+          <ArmorBlock armorType={"head"}></ArmorBlock>
+          <ArmorBlock armorType={"chest"}></ArmorBlock>
+          <ArmorBlock armorType={"arms"}></ArmorBlock>
+          <ArmorBlock armorType={"waist"}></ArmorBlock>
+          <ArmorBlock armorType={"legs"}></ArmorBlock>
         </section>
       )}
-      {isStatsSelected && (
-        <section className='stats-container'>
+      <section className='stats-container'>
+        {(isStatsSelected || isEverythingSelected) && (
           <div className='equipped-stats' >
             {/* maybe have these blocks be their own components */}
             <h4>Attack</h4>
             <div>
               <ul className='attack-stats striped'>
-                <li>Attack : { baseWeaponData ? baseWeaponData.base.base.base.atk : "N/A"}</li>
+                <li>Attack : {baseWeaponData ? baseWeaponData.base.base.base.atk : "N/A"}</li>
                 <li> oh oh me too</li>
               </ul>
             </div>
@@ -106,18 +114,18 @@ console.log(weaponName);
             <div></div>
             <br />
           </div>
-          {isSkillsSelected && (
-            <section className='skills-container'>
-              <div className='equipped-skills' >
-                <br />
-                <h4>
-                  Skills
-                </h4>
-              </div>
-            </section>
-          )}
-        </section>
-      )}
+        )}
+        {(isSkillsSelected || isEverythingSelected) && (
+          <section className='skills-container'>
+            <div className='equipped-skills' >
+              <br />
+              <h4>
+                Skills
+              </h4>
+            </div>
+          </section>
+        )}
+      </section>
     </main>
   );
 }
