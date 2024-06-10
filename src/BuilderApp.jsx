@@ -1,13 +1,22 @@
 import './css/builderApp.css'
-import { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
+import ClickOutsideWrapper from './components/ClickOutsideWrapper';
 import WeaponBlock from './components/WeaponBlock';
 import ArmorBlock from './components/ArmorBlock';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
+
 export default function BuilderApp() {
-  const [weaponID, setWeaponID] = useState(null);
+  // States dealing with DOM/tabs
   const [selectedTab, setSelectedTab] = useState(0);
+  const [isSaveWindowOpen, setIsSaveWindowOpen] = useState(false);
+  const saveWindowRef = useRef(null);
+
+  // States dealing with data
   const [weaponData, setWeaponData] = useState(null);
   const [baseWeaponData, setBaseWeaponData] = useState(null);
+  const [weaponID, setWeaponID] = useState(null);
   const [weaponName, setWeaponName] = useState('');
   const [weaponType, setWeaponType] = useState(1);
 
@@ -56,6 +65,12 @@ export default function BuilderApp() {
   const handleTabClick = (index) => {
     setSelectedTab(index);
   };
+  /**
+   * Sets Save Window shown/hidden state
+   */
+  const toggleSaveState = () => {
+    setIsSaveWindowOpen(!isSaveWindowOpen);
+  }
 
   const isEquipmentSelected = selectedTab === 0;
   const isStatsSelected = selectedTab === 1;
@@ -65,7 +80,7 @@ export default function BuilderApp() {
   if (!weaponData) {
     return <div>Loading...</div>;
   }
-
+  console.log("Is the save window open: " + isSaveWindowOpen)
   return (
     <main className='container'>
       <div className='tab-container'>
@@ -86,6 +101,11 @@ export default function BuilderApp() {
           onClick={() => handleTabClick(2)}
         >
           Skills
+        </div>
+        <div
+          className={'tab SaveWindow'}
+          onClick={() => toggleSaveState()}>
+          <FontAwesomeIcon icon={faFloppyDisk} />
         </div>
       </div>
       {(isEquipmentSelected || isEverythingSelected) && (
@@ -126,6 +146,12 @@ export default function BuilderApp() {
           </section>
         )}
       </section>
+      <ClickOutsideWrapper isOpen={isSaveWindowOpen} setIsOpen={setIsSaveWindowOpen}>
+        <div 
+          className='save-window'>
+          Save some stuff?
+        </div>
+      </ClickOutsideWrapper>
     </main>
   );
 }
