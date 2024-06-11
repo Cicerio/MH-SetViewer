@@ -1,0 +1,17 @@
+.weaponSelect-block{
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 5px;
+  padding: 8px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color : var(--russian-violet-lite);
+}
+.weaponSelect-stats{
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  grid-gap: 5px;
+  padding: 2px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}

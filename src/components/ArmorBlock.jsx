@@ -18,11 +18,11 @@ function getEquipIcon(armorType){
   }
 
 }
-export default function ArmorBlock(props){
+export default function ArmorBlock({onClick, ...props}){
 
   return(
     <>
-      <div className="gearItem-container">
+      <div className="gearItem-container" onClick={onClick}>
         <div className="item-container">
           <div className="slot-icon">
             <img alt="slot icon" src={getEquipIcon(props.armorType)}></img>

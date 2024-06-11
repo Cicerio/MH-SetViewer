@@ -7,6 +7,9 @@
   grid-template-rows: 54px auto auto;
   grid-gap: 4px;
 }
+.item-container:hover{
+  background-color: var(--tekhelet);
+}
 .item-container{
   height: 38px;
   background-color: var(--russian-violet-lite);

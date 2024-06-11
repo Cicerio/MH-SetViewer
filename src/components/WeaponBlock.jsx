@@ -38,14 +38,14 @@ function getWeaponIcon(type) {
 
   }
 }
-export default function WeaponBlock(props) {
+export default function WeaponBlock({onClick, ...props}) {
   /**
    * Id/Name style:
    * W_ChargeAxe_{ID}_{Name, Explain}
    */
   return (
     <>
-      <div className="gearItem-container">
+      <div className="gearItem-container" onClick={onClick}>
         <div className="item-container">
           <div className="slot-icon">
             <img alt="slot icon" src={getWeaponIcon(props.weapType)}></img>
