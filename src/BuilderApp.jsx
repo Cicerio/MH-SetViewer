@@ -22,13 +22,14 @@ export default function BuilderApp() {
   const [isEquipWindowOpen, setIsEquipWindowOpen] = useState(false);
   // States dealing with data
   const [weaponData, setWeaponData] = useState(null);
-  const [armorData, setArmorData] = useState(null);
   const [baseWeaponData, setBaseWeaponData] = useState(null);
-  const [weaponID, setWeaponID] = useState(null);
+  const [weaponID, setWeaponID] = useState(0);
   const [weaponName, setWeaponName] = useState('');
   const [weaponType, setWeaponType] = useState(10);
-  const [armorIDs, setArmorIDs] = useState([null, null, null, null, null]);
 
+  const [armorData, setArmorData] = useState(null);
+  const [armorIDs, setArmorIDs] = useState([null, null, null, null, null]);
+  const [armorNames, setArmorNames] = useState(['', '', '', '', ''])
 
   useEffect(() => { //  Loading JSON data
     const fetchData = async () => { // fetching armor and weapon data
@@ -66,12 +67,41 @@ export default function BuilderApp() {
   }, []);
 
   useEffect(() => { // to handle weaponID change
-    setWeaponID(56);
     setBaseWeaponData(weaponData ?
       weaponData.charge_axe.base_data.param.find(obj => obj.base.base.base.base.id.ChargeAxe === weaponID) : null);
     setWeaponName(weaponData ?
       weaponData.charge_axe.name.entries.find(obj => obj.name === 'W_ChargeAxe_' + convertToThreeDigits(weaponID) + '_Name')?.content[1] : null);
   }, [weaponData, weaponID]);
+
+  useEffect(() => { // handle armorID change
+    const armorTypeRefs = [
+      "armor_head_name_msg",
+      "armor_chest_name_msg",
+      "armor_arm_name_msg",
+      "armor_waist_name_msg",
+      "armor_leg_name_msg"]
+    const armorTypes = ["Head", "Chest", "Arm", "Waist", "Leg"];
+    // maps the ids to the names, and creates a new armorName array
+    let newArmorNames = armorIDs.map((element, index) => {
+      if (element !== null) {
+        const nameID = convertToThreeDigits(element);
+        console.log(nameID);
+        const nameData = armorData[armorTypeRefs[index]];
+        console.log(nameData);
+        let armorName = nameData ? nameData.entries.find(obj => obj.name === 'A_' + [armorTypes[index]] + '_' + nameID + '_Name')?.content[1] : "unfound";
+        console.log(armorName);
+        return armorName
+      } else {
+        console.log("There's no element? " + element)
+        return element;
+      }
+    });
+
+    setArmorNames(newArmorNames);
+    console.log("New armor names: " + newArmorNames);
+    console.log(armorIDs);
+  }, [armorIDs]);
+
   useEffect(() => { // FOR TESTING ONLY
     console.log("Save Window State: " + isSaveWindowOpen +
       ", \n Weapon Window State: " + isWeaponWindowOpen +
@@ -90,13 +120,26 @@ export default function BuilderApp() {
   const toggleWeaponWindowState = () => {
     setIsWeaponWindowOpen(!isWeaponWindowOpen);
   }
-  
+
   const toggleEquipWindowState = () => {
     setIsEquipWindowOpen(!isEquipWindowOpen);
   }
-  const handleEquipTypeChange = (event) => {
-    const selectedOption = event.target.value;
-    setEquipOpenType(selectedOption);
+  const handleWeaponClick = (id) => {
+    setWeaponID(id);
+    console.log("Setting weapon ID to: " + id)
+  }
+  const handleEquipmentClick = (id, type) => {
+    // setArmorIDs[type] = id;
+    let newArmorIDs = armorIDs.map((element, index) => {
+      if (index === type) {
+        return id;
+      } else {
+        return element;
+      }
+    })
+    console.log("ARMOR BEING SET TO: " + id);
+    console.log("TYPE OF ARMOR: " + type);
+    setArmorIDs(newArmorIDs);
   }
 
   const isEquipmentSelected = selectedTab === 0;
@@ -137,11 +180,11 @@ export default function BuilderApp() {
       {(isEquipmentSelected || isEverythingSelected) && (
         <section className='gear-container'>
           <WeaponBlock onClick={toggleWeaponWindowState} weapType={weaponType} name={weaponName}></WeaponBlock>
-          <ArmorBlock armorType={"head"} onClick={toggleEquipWindowState}></ArmorBlock>
-          <ArmorBlock armorType={"chest"} onClick={toggleEquipWindowState}></ArmorBlock>
-          <ArmorBlock armorType={"arms"} onClick={toggleEquipWindowState}></ArmorBlock>
-          <ArmorBlock armorType={"waist"} onClick={toggleEquipWindowState}></ArmorBlock>
-          <ArmorBlock armorType={"legs"} onClick={toggleEquipWindowState}></ArmorBlock>
+          <ArmorBlock armorType={"head"} name={armorNames[0]} onClick={toggleEquipWindowState}></ArmorBlock>
+          <ArmorBlock armorType={"chest"} name={armorNames[1]} onClick={toggleEquipWindowState}></ArmorBlock>
+          <ArmorBlock armorType={"arms"} name={armorNames[2]} onClick={toggleEquipWindowState}></ArmorBlock>
+          <ArmorBlock armorType={"waist"} name={armorNames[3]} onClick={toggleEquipWindowState}></ArmorBlock>
+          <ArmorBlock armorType={"legs"} name={armorNames[4]} onClick={toggleEquipWindowState}></ArmorBlock>
         </section>
       )}
       <section className='stats-container'>
@@ -152,8 +195,8 @@ export default function BuilderApp() {
             <div>
               <ul className='attack-stats striped'>
                 <li>Attack (Raw): {baseWeaponData ? baseWeaponData.base.base.base.atk : "N/A"}</li>
-                <li>Affinity: {baseWeaponData ? baseWeaponData.base.base.base.critical_rate +"\%": 0 + "\%"}</li>
-                {baseWeaponData.base.base.main_element_type !== "None" && 
+                <li>Affinity: {baseWeaponData ? baseWeaponData.base.base.base.critical_rate + "\%" : 0 + "\%"}</li>
+                {baseWeaponData.base.base.main_element_type !== "None" &&
                   <li>{baseWeaponData.base.base.main_element_type} : {baseWeaponData.base.base.main_element_val}</li>
                 }
               </ul>
@@ -185,13 +228,13 @@ export default function BuilderApp() {
       {/* Weapon tab popup */}
       <PopupWindow isOpen={isWeaponWindowOpen} setIsOpen={setIsWeaponWindowOpen} windowHeader={"Select Weapon"}>
         <div className='weapon-window'>
-          <SelectionGrid type="weapon" data={weaponData}></SelectionGrid>
+          <SelectionGrid type="weapon" data={weaponData} onClick={handleWeaponClick}></SelectionGrid>
         </div>
       </PopupWindow>
       {/* Equipment tab popup */}
       <PopupWindow isOpen={isEquipWindowOpen} setIsOpen={setIsEquipWindowOpen} windowHeader={"Select your equipment!"}>
         <div className='equip-window'>
-          <SelectionGrid type="equipment" data={armorData}></SelectionGrid>
+          <SelectionGrid type="equipment" data={armorData} onClick={handleEquipmentClick}></SelectionGrid>
         </div>
       </PopupWindow>
     </main>

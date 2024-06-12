@@ -3,7 +3,7 @@ import '../css/ArmorSetGrid.css'
 function convertToThreeDigits(number) {
   return number.toString().padStart(3, '0');
 }
-export default function ArmorSetGrid({ armorID, data, ...props }) {
+export default function ArmorSetGrid({ armorID, data, onClick, ...props }) {
   const armorTypes = ["Head", "Chest", "Arm", "Waist", "Leg"];
   const armorTypeRefs = [
     "armor_head_name_msg", 
@@ -34,11 +34,11 @@ export default function ArmorSetGrid({ armorID, data, ...props }) {
     armorTypes.forEach((element) => {
       // find base data
       armorSet[element] = data.armor.param.find(obj => obj.pl_armor_id[element] === armorID) || [element];
-      console.log(armorSet[element].pl_armor_id);
+      // console.log(armorSet[element].pl_armor_id);
       //find names
       const nameData = data[armorTypeRefs[armorTypes.indexOf(element)]];
       armorSetNames[element] = nameData ? nameData.entries.find(obj => obj.name === 'A_'+[element]+'_' + nameID + '_Name')?.content[1] : [element];
-      console.log(armorSetNames[element]);
+      // console.log(armorSetNames[element]);
     });
     // Object.keys(data).forEach((property) => {
     //   if(armorTypeRefs.includes(property)){
@@ -50,11 +50,11 @@ export default function ArmorSetGrid({ armorID, data, ...props }) {
       <div className='ArmorSetGrid'>
         <div className='ArmorSetGrid-setName'>{setName}</div>
         <div className='ArmorSetGrid-content'>
-          <span>{armorSetNames.Head}</span>
-          <span>{armorSetNames.Chest}</span>
-          <span>{armorSetNames.Arm}</span>
-          <span>{armorSetNames.Waist}</span>
-          <span>{armorSetNames.Leg}</span>
+          <span onClick={() => onClick(armorID, 0)}>{armorSetNames.Head}</span>
+          <span onClick={() => onClick(armorID, 1)}>{armorSetNames.Chest}</span>
+          <span onClick={() => onClick(armorID, 2)}>{armorSetNames.Arm}</span>
+          <span onClick={() => onClick(armorID, 3)}>{armorSetNames.Waist}</span>
+          <span onClick={() => onClick(armorID, 4)}>{armorSetNames.Leg}</span>
         </div>
       </div>
     );
