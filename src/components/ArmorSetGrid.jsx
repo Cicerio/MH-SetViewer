@@ -1,8 +1,6 @@
 import '../css/ArmorSetGrid.css'
+import { convertToThreeDigits } from '../helpers/helpers';
 
-function convertToThreeDigits(number) {
-  return number.toString().padStart(3, '0');
-}
 export default function ArmorSetGrid({ armorID, data, onClick, ...props }) {
   const armorTypes = ["Head", "Chest", "Arm", "Waist", "Leg"];
   const armorTypeRefs = [

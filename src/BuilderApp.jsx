@@ -1,18 +1,15 @@
 import './css/builderApp.css';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
+import { convertToThreeDigits, getWeaponName, getWeaponBaseData } 
+from './helpers/helpers';
 
 import PopupWindow from './components/PopupWindow';
 import WeaponBlock from './components/WeaponBlock';
 import ArmorBlock from './components/ArmorBlock';
-import BasicSelect from './components/BasicSelect';
 import SelectionGrid from './components/SelectionGrid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
 
-// helper functions
-function convertToThreeDigits(number) {
-  return number.toString().padStart(3, '0');
-}
 export default function BuilderApp() {
   // Any state that has an intial value rerenders the page once.
   // States dealing with DOM/tabs
@@ -26,12 +23,22 @@ export default function BuilderApp() {
   const [weaponID, setWeaponID] = useState(0);
   const [weaponName, setWeaponName] = useState('');
   const [weaponType, setWeaponType] = useState(10);
+  const [weaponBaseStats, setWeaponBaseStats] = useState({
+    rarity: null,
+    atk: null,
+    aff: null,
+    def_bonus:null,
+    sharpness_block:[
+      0, 0, 0, 0, 0, 0, 0
+    ],
+    
+  })
 
   const [armorData, setArmorData] = useState(null);
   const [armorIDs, setArmorIDs] = useState([null, null, null, null, null]);
   const [armorNames, setArmorNames] = useState(['', '', '', '', ''])
 
-  useEffect(() => { //  Loading JSON data
+  useEffect(() => { //  Loading raw JSON data
     const fetchData = async () => { // fetching armor and weapon data
       try {
         const response = await fetch('https://gist.githubusercontent.com/Cicerio/f008eaeb97f4c8e6b68418b72c4a9488/raw/1fa7d2f49cc499c9bd8569f0cff44b5435de359b/mhrice_charge-axe.json');
@@ -67,10 +74,8 @@ export default function BuilderApp() {
   }, []);
 
   useEffect(() => { // to handle weaponID change
-    setBaseWeaponData(weaponData ?
-      weaponData.charge_axe.base_data.param.find(obj => obj.base.base.base.base.id.ChargeAxe === weaponID) : null);
-    setWeaponName(weaponData ?
-      weaponData.charge_axe.name.entries.find(obj => obj.name === 'W_ChargeAxe_' + convertToThreeDigits(weaponID) + '_Name')?.content[1] : null);
+    setBaseWeaponData(getWeaponBaseData(weaponData, weaponID));
+    setWeaponName(getWeaponName(weaponData, weaponID));
   }, [weaponData, weaponID]);
 
   useEffect(() => { // handle armorID change
@@ -127,6 +132,7 @@ export default function BuilderApp() {
   const handleWeaponClick = (id) => {
     setWeaponID(id);
     console.log("Setting weapon ID to: " + id)
+    toggleWeaponWindowState();
   }
   const handleEquipmentClick = (id, type) => {
     // setArmorIDs[type] = id;
@@ -140,6 +146,8 @@ export default function BuilderApp() {
     console.log("ARMOR BEING SET TO: " + id);
     console.log("TYPE OF ARMOR: " + type);
     setArmorIDs(newArmorIDs);
+    // to close window after selection
+    toggleEquipWindowState();
   }
 
   const isEquipmentSelected = selectedTab === 0;
@@ -191,7 +199,6 @@ export default function BuilderApp() {
         {(isStatsSelected || isEverythingSelected) && (
           <div className='equipped-stats' >
             {/* maybe have these blocks be their own components */}
-
             <div>
               <ul className='attack-stats striped'>
                 <li>Attack (Raw): {baseWeaponData ? baseWeaponData.base.base.base.atk : "N/A"}</li>

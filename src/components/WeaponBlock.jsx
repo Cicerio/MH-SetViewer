@@ -5,39 +5,9 @@ import '../css/WeaponBlock.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGripLinesVertical } from '@fortawesome/free-solid-svg-icons'
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { getWeaponIconURL } from "../helpers/helpers";
 
-function getWeaponIcon(type) {
-  switch (type) {
-    case 1:
-      return "icons/MH-Icons/Weapons/Greatsword-Rarity-1.png";
-    case 2:
 
-    case 3:
-
-    case 4:
-
-    case 5:
-
-    case 6:
-
-    case 7:
-
-    case 8:
-
-    case 9:
-
-    case 10: // Charge Blade
-      return "../../icons/MH-Icons/Weapons/ChargeBlade-Rarity-1.svg"
-    case 11:
-
-    case 12:
-
-    case 13:
-
-    case 14:
-
-  }
-}
 export default function WeaponBlock({onClick, ...props}) {
   /**
    * Id/Name style:
@@ -48,7 +18,7 @@ export default function WeaponBlock({onClick, ...props}) {
       <div className="gearItem-container" onClick={onClick}>
         <div className="item-container">
           <div className="slot-icon">
-            <img alt="slot icon" src={getWeaponIcon(props.weapType)}></img>
+            <img alt="slot icon" src={getWeaponIconURL(props.weapType, 1)}></img>
           </div>
           {props.name && (
             <div className="selected-item">
