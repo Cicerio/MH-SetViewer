@@ -324,7 +324,7 @@ export default function BuilderApp() {
     setPrevArmorIDs(armorIDs);
     setArmorIDs(newArmorIDs);
     // to close window after selection
-    toggleEquipWindowState();
+    // toggleEquipWindowState();
   }
 
   const handleWeaponStatChange = (weaponData, weaponID) => {

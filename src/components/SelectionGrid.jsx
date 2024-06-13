@@ -3,29 +3,23 @@ import ArmorSetGrid from "./ArmorSetGrid";
 import WeaponSelectBlock from "./WeaponSelectBlock";
 
 export default function SelectionGrid({ type, data, onClick, ...props }) {
-  const sampleWeaponIDs = [1, 23, 56, 120, 22, 13, 5, 8]
+  const sampleWeaponIDs = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+  const sampleArmorIDs = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
   return (
     <>
       <div className="selection-grid">
-        {type === "weapon" &&
+      {type === "weapon" &&
           <>
-            <WeaponSelectBlock weaponID={sampleWeaponIDs[0]} data={data} onClick={onClick} />
-            <WeaponSelectBlock weaponID={sampleWeaponIDs[1]} data={data} onClick={onClick} />
-            <WeaponSelectBlock weaponID={sampleWeaponIDs[2]} data={data} onClick={onClick} />
-            <WeaponSelectBlock weaponID={sampleWeaponIDs[3]} data={data} onClick={onClick} />
-            <WeaponSelectBlock weaponID={sampleWeaponIDs[4]} data={data} onClick={onClick} />
-            <WeaponSelectBlock weaponID={sampleWeaponIDs[5]} data={data} onClick={onClick} />
-            <WeaponSelectBlock weaponID={sampleWeaponIDs[6]} data={data} onClick={onClick} />
-            <WeaponSelectBlock weaponID={sampleWeaponIDs[7]} data={data} onClick={onClick} />
+            {sampleWeaponIDs.map((weaponID) => (
+              <WeaponSelectBlock key={weaponID} weaponID={weaponID} data={data} onClick={onClick} />
+            ))}
           </>
         }
         {type === "equipment" &&
           <>
-            <ArmorSetGrid armorID={0} data={data} onClick={onClick}></ArmorSetGrid>
-            <ArmorSetGrid armorID={51} data={data} onClick={onClick}></ArmorSetGrid>
-            <ArmorSetGrid armorID={22} data={data} onClick={onClick} />
-            <ArmorSetGrid armorID={5} data={data} onClick={onClick} />
-            <ArmorSetGrid armorID={12} data={data} onClick={onClick} />
+            {sampleArmorIDs.map((armorID) => (
+              <ArmorSetGrid key={armorID} armorID={armorID} data={data} onClick={onClick} />
+            ))}
           </>
         }
       </div>
