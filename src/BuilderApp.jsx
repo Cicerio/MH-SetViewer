@@ -1,6 +1,6 @@
 import './css/builderApp.css';
 import React, { useState, useEffect } from 'react';
-import { convertToThreeDigits, getWeaponName, getWeaponBaseData, getIconURL, getEquipmentBaseData }
+import { convertToThreeDigits, getWeaponName, getWeaponBaseData, getIconURL, getEquipmentBaseData, getTrueRawAttack }
   from './helpers/helpers';
 
 import InfoTab from './components/InfoTab';
@@ -81,13 +81,13 @@ export default function BuilderApp() {
     }
   ]);
   const [totalDefenses, setTotalDefenses] = useState({
-      raw: null,
-      fire: null,
-      water: null,
-      thunder: null,
-      ice: null,
-      dragon: null,
-    })
+    raw: null,
+    fire: null,
+    water: null,
+    thunder: null,
+    ice: null,
+    dragon: null,
+  })
 
   useEffect(() => { //  Loading raw JSON data
     const fetchData = async () => { // fetching armor and weapon data
@@ -168,7 +168,7 @@ export default function BuilderApp() {
       if (changedArmorIDs[index] != null) {
         console.log(`ArmorID at index ${index} has changed to ${armorIDs[index]}`);
         const armorBaseData = getEquipmentBaseData(armorData, armorIDs[index], index);
-        if(armorBaseData){
+        if (armorBaseData) {
           const newDefenses = {
             raw: armorBaseData.def_val,
             fire: armorBaseData.fire_reg_val,
@@ -182,7 +182,7 @@ export default function BuilderApp() {
       }
     });
     setArmorDefenses(newDefensesBlock);
-    if(newDefensesBlock){
+    if (newDefensesBlock) {
       const compressedDefenses = newDefensesBlock.reduce((acc, obj) => {
         Object.keys(obj).forEach((key) => {
           acc[key] = (acc[key] || 0) + obj[key];
@@ -380,7 +380,7 @@ export default function BuilderApp() {
                   <span>{weaponBaseStats.atk ? weaponBaseStats.atk : "NaN"}</span>
                 </li>
                 <li>
-                  <span>Affinity </span>
+                  <span>Affinity</span>
                   <span>{weaponBaseStats.aff ? weaponBaseStats.aff + "\%" : "0\%"}</span>
                 </li>
                 <li>
@@ -393,6 +393,10 @@ export default function BuilderApp() {
                     <span>{weaponBaseStats.element_value}</span>
                   </li>
                 }
+                <li>
+                  <span>True Raw</span>
+                  <span>{getTrueRawAttack(weaponBaseStats.atk, weaponBaseStats.sharpness_block)}</span>
+                </li>
                 <li>
                   <span>Sharpness</span>
                   <div className='sharpness-bar sharpness-statgrid'>

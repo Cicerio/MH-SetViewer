@@ -31,6 +31,35 @@ export function getWeaponBaseData(weaponData, weaponID) {
     ? weaponData.charge_axe.base_data.param.find(obj => obj.base.base.base.base.id.ChargeAxe === weaponID)
     : null;
 }
+export function getTrueRawAttack(attack, sharpnessBlock) {
+  if (!Array.isArray(sharpnessBlock)) {
+    return attack;
+  }
+  let sharpLevel = 0, sharpMod = 0;
+  sharpnessBlock.forEach(element => {
+    if (element) {
+      sharpLevel++
+    }
+    switch (sharpLevel) {
+      case 1, 2, 3:
+        sharpMod = 0.5 + ((sharpLevel - 1) * 0.25);
+        break
+      case 4:
+        sharpMod = 1.05
+        break
+      case 5:
+        sharpMod = 1.20
+        break
+      case 6:
+        sharpMod = 1.32
+        break
+      case 7:
+        sharpMod = 1.39
+        break
+    }
+  });
+  return attack * sharpMod;
+}
 export function getWeaponIconURL(type, rarity) {
   switch (type) {
     case 1:
@@ -81,10 +110,10 @@ export function getEquipmentName(armorData, armorID, type) {
 }
 export function getEquipmentBaseData(armorData, armorID, type) {
   const armorTypes = ["Head", "Chest", "Arm", "Waist", "Leg"];
-  return armorData 
-  ? armorData.armor.param.find(obj => 
-    obj.pl_armor_id[armorTypes[type]] === armorID) 
-  : null;
+  return armorData
+    ? armorData.armor.param.find(obj =>
+      obj.pl_armor_id[armorTypes[type]] === armorID)
+    : null;
 }
 export function getIconURL(stat) {
   switch (stat) {
