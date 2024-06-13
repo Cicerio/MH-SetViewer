@@ -1,0 +1,24 @@
+.ArmorSetGrid{
+  border: 5px solid var(--tekhelet);
+  border-radius: 4px;
+  padding: 4px;
+}
+.ArmorSetGrid-content{
+  /* border: 3px solid var(--russian-violet-lite); */
+  border-radius: 4px;
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 5px;
+  padding: 8px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.ArmorSetGrid-content > span{
+  background-color: var(--russian-violet-lite);
+  border-radius: 3px;
+  padding: 4px;
+  cursor: pointer;
+}
+.ArmorSetGrid-content > span:hover{
+  background-color: var(--tekhelet);
+}

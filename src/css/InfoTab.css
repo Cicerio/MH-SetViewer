@@ -1,0 +1,11 @@
+div.infotab-header > i, div.infotab-header > i {
+  cursor: pointer;
+}
+div.infotab-header > i:hover, div.infotab-header > i:hover {
+  background: none;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  /* background-color: var(--burgundy); */
+  cursor: pointer;
+}

@@ -1,0 +1,70 @@
+.weaponSelect-block{
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 5px;
+  padding: 8px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color : var(--russian-violet-lite);
+  border-radius: 8px;
+  border:2px solid var(--goldenrod)
+}
+.weaponSelect-header{
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+}
+.weaponSelect-block:hover{
+  background-color: var(--tekhelet);
+}
+.weaponSelect-stats{
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-gap: 0px;
+  padding: 2px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.weaponSelect-stat{
+  display:grid;
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+  padding: 2px 10px;
+  margin: 1px;
+  background-color : var(--palatinate);
+  border-radius: 6px;
+}
+.weaponSelect-sharpness{
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.sharpness-bar{
+ display:flex;
+ flex-direction: row;
+ height:19px
+}
+.sharpness-bar > span{
+  background-color: var(--goldenrod);
+}
+span.sharp-val-1{
+  background-color:#cf2121;
+}
+span.sharp-val-2{
+  background-color:#ff9f00;
+}
+span.sharp-val-3{
+  background-color:#fff351;
+}
+span.sharp-val-4{
+  background-color:#4be271;
+}
+span.sharp-val-5{
+  background-color:#6a5ddb;
+}
+span.sharp-val-6{
+  background-color:#e2e2e2;
+}
+span.sharp-val-7{
+  background-color:#7b00ce;
+}

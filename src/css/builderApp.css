@@ -1,0 +1,217 @@
+:root {
+  /* MAIN COLOR PALETTE: */
+  /* https://coolors.co/200d45-523787-7e1120-d45e77-f69ded-efe9e7-d9a939 */
+  --russian-violet: #200d45ff;
+  --russian-violet-lite: #392266;
+  --tekhelet: #523787ff;
+  --palatinate: #682454;
+  --burgundy: #7e1120ff;
+  --blush: #d45e77ff;
+  --plum-web: #f69dedff;
+  --isabelline: #efe9e7ff;
+  --goldenrod: #d9a939ff;
+  background-color: var(--russian-violet);
+  color: var(--isabelline);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#root {
+  height: 100vh;
+  justify-items: center;
+}
+/* testing*/
+/* body * {
+  border: 1px dotted white
+} */
+/* end of testing */
+body {
+  height: 100vh;
+  margin: auto;
+  overflow-x: hidden;
+}
+
+main.container,
+.tab-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+}
+
+.tab-container,
+.tab {
+  background-color: var(--russian-violet-lite);
+  border-radius: 3px 3px 0 0;
+  text-align: center;
+  line-height: 34px;
+  cursor: pointer;
+}
+
+.tab:hover {
+  background-color: var(--burgundy);
+}
+
+main.container {
+  bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 16px;
+  margin: 6px;
+  overflow: hidden;
+}
+.equipped-stats {
+  padding-top: 4px;
+}
+
+.selected {
+  color: var(--goldenrod);
+  background-color: var(--palatinate);
+}
+
+.tab-container {
+  background-color: var(--russian-violet);
+  height: 34px;
+  display: grid;
+  border-bottom: 4px solid var(--palatinate);
+  grid-template-columns: repeat(3, 1fr) 40px;
+  grid-gap: 4px;
+
+}
+
+.gear-container,
+.stats-container {
+  position:absolute;
+  top: 34px;
+  grid-column: 1 / 4;
+  margin-top: 16px;
+  width:100%;
+}
+button{
+  background: none;
+    border: none;
+    border-radius:4px;
+    outline: none;
+    color: #969696;
+    cursor: pointer;
+}
+button:hover{
+  background-color: var(--burgundy);
+  color: var(--goldenrod);
+}
+.popup-window-content{
+  overflow-x:hidden;
+}
+.selection-grid{
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 8px;
+  padding: 8px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.popup-window-content::-webkit-scrollbar {
+  width: 12px; /* Set the width of the scrollbar */
+}
+.selection-grid > *{
+  overflow-x: hidden;
+}
+.popup-window-content::-webkit-scrollbar-thumb {
+  background-color: var(--tekhelet); /* Set the color of the scrollbar thumb */
+}
+.popup-window-content::-moz-scrollbar-thumb {
+  background-color: var(--tekhelet); /* Set the color of the scrollbar thumb */
+}
+ul.striped{
+  list-style: none;
+  padding: 2px;
+  margin: 0px 0px 16px 0px;
+}
+li.element-defenses{
+  background-color: var(--tekhelet);
+  padding: 4px;
+}
+li.element-defenses > ul.striped {
+  background-color: var(--russian-violet) !important;
+  margin-bottom: 0px !important;
+}
+ul.striped > li:not(.element-defenses) {
+  display:grid;
+  font-size: 0.90em;
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+  padding: 2px;
+}
+ul.striped > li:nth-child(even){
+  background-color: var(--russian-violet-lite);
+}
+div.sharpness-statgrid, .swordhilt{
+  height: 16px !important;
+  align-self: center;
+}
+div.sharpness-statgrid > span{
+  height:10px !important;
+  align-self: center;
+}
+hr{
+  width: 100%;
+  border-color: var(--goldenrod);
+}
+#save-subtitle{
+  font-size: smaller;
+  font-style: italic;
+  color:var(--plum-web)
+}
+.save-inputs, .save-buttons{
+  background-color: var(--tekhelet);
+  border-radius: 8px;
+  color: var(--isabelline);
+}
+.save-buttons{
+  padding:5px;
+  background-color: var(--tekhelet);
+}
+.save-inputs{
+  width: 98%;
+  justify-self: center;
+  resize: vertical;
+}
+.save-box{
+  margin: 10px 0px;
+}
+.event-toast, .error-toast{
+  font-size: smaller;
+  font-style: italic;
+  margin: 0px 10px;
+}
+.event-toast{
+  color:var(--goldenrod)
+}
+.error-toast{
+  color: var(--plum-web);
+}
+@media screen and (min-width: 700px) {
+  .tab-container {
+    display: none;
+  }
+
+  .gear-container,
+  .stats-container {
+    grid-row: 1;
+    position: absolute;
+    top: 0;
+    bottom: 12px;
+    right: 0;
+    left: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .gear-container {
+    color: pink;
+    grid-column: 1 / 3;
+  }
+
+  .stats-container {
+    grid-column: 3;
+  }
+}
