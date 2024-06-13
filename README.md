@@ -1,37 +1,32 @@
-# MH-SetViewer
-A small website for a monster hunter build viewer based on JSON files.
+# The Equipment Box (Monster Hunter Rise Set Builder)
+A small website for a monster hunter build creator/viewer based on JSON files.
 
 Right now, it only can view properly written JSON files.
 
 Originally a small school project, I'mma try to get this properly working.
+Credit to: MHRice Info site for the data ripped from MH:Rise/Sunbreak.
 
 Features:
-* Rewritten in React - Now can modularize webpages, and can focus on making others.
+* Built with React to offer a smooth and user-friendly app interface for both mobile and desktop.
+* Can select armor from all of the base game armors (sunbreak armors will be added soon)
+* Select weapons (Charge Blade Only, for now) from a variety of different weapons, and see their stats
+* The stats page gives a combination of all the stats you will have with the selected equipment, 
+  including proper damage modified for sharpness levels.
 
-TODO:
-* Write a way to display sharpness
-* Make use of https://mhrise.mhrice.info/mhrice.json for equipment data.
-  Credit to: MHRice Info site
-  1. Weapons first, using sort ids + weapon ids to search stats
-      * Data processor (maybe json, maybe component) that'll bring the assets not included in the json for the builder   
-* Maybe add a set creator, requiring a database of armors 
-* Add support for Sunbreak armors, 
-    Maybe even have a Sunbreak-Iceborne mode swapping
-* Mobile-first UI, RESPONSIVE ui
-    rework the right column  
-    do proper sharpness values (learn how they work)
+##### TODO:
+* Write detailed tooltips for stats and weapons.
+* Add support for Sunbreak armors, - INCOMPLETE - WIP
+    - Maybe even have a Sunbreak-Iceborne mode swapping - After finishing sunbreak support
+* Support for more weapons
+* Implementation of more game mechanics, such as:
+  - Skills
+  - Weapon types other than Charge Blade
+  - Talismans
+  - Sunbreak armors
+    * Also Qurio armor, weapon, and talisman support
 
-    Have an icon swapper (World-Rise)
-
-
-THE PLAN:
-
-
-  I want this app to select from a list of armor and weapons,
-
-  Be able to attach a set to an equip loadout page selection thing
-
-  Then I want it able to be saved/loaded via json file
-  Screenshot too
-  Minimum Viable Product.
-
+## Installation
+1. Clone this repository.
+2. Navigate to the project directory.
+3. Install dependencies using `npm install`.
+4. Run the application using `npm run dev`.
