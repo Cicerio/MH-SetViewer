@@ -21,7 +21,7 @@ export function convertToThreeDigits(number) {
  */
 export function getWeaponName(weaponData, weaponID) {
   return weaponData
-    ? weaponData.charge_axe.name.entries.find(obj => 
+    ? weaponData.charge_axe.name.entries.find(obj =>
       obj.name === 'W_ChargeAxe_' + convertToThreeDigits(weaponID) + '_Name')?.content[1]
     : "unfound";
 }
@@ -34,7 +34,7 @@ export function getWeaponBaseData(weaponData, weaponID) {
 export function getWeaponIconURL(type, rarity) {
   switch (type) {
     case 1:
-      return "icons/MH-Icons/Weapons/Greatsword-Rarity-"+rarity+".png";
+      return "icons/MH-Icons/Weapons/Greatsword-Rarity-" + rarity + ".png";
     case 2:
 
     case 3:
@@ -53,8 +53,8 @@ export function getWeaponIconURL(type, rarity) {
 
     case 10: // Charge Blade
       return ("icons/MH-Icons/Weapons/ChargeBlade-Rarity-"
-         + rarity + 
-         (rarity !== 1 ? ".png" : ".svg"));
+        + rarity +
+        (rarity !== 1 ? ".png" : ".svg"));
     case 11:
 
     case 12:
@@ -69,16 +69,26 @@ export function getEquipmentName(armorData, armorID, type) {
   switch (type) {
     case "set":
       return armorData
-        ? armorData.armor_series_name_msg.entries.find(obj => 
+        ? armorData.armor_series_name_msg.entries.find(obj =>
           obj.name === "ArmorSeries_Hunter_" + convertToThreeDigits(armorID))?.content[1]
         : "unfound";
     case "armor":
-      return armorData
-        ? armorData.armor_series_name_msg.entries.find(obj => 
-          obj.name === "ArmorSeries_Hunter_" + convertToThreeDigits(armorID))?.content[1]
-        : "unfound";
+      const nameID = convertToThreeDigits(element);
+      const nameData = armorData[armorTypeRefs[index]];
+      let armorName = nameData ? nameData.entries.find(obj => obj.name === 'A_' + [armorTypes[index]] + '_' + nameID + '_Name')?.content[1] : "unfound";
+      return armorName;
   }
 }
-export function getArmorBaseData(){
-
+export function getEquipmentBaseData(armorData, armorID, type) {
+  const armorTypes = ["Head", "Chest", "Arm", "Waist", "Leg"];
+  return armorData 
+  ? armorData.armor.param.find(obj => 
+    obj.pl_armor_id[armorTypes[type]] === armorID) 
+  : null;
+}
+export function getIconURL(stat) {
+  switch (stat) {
+    case "swordhilt":
+      return "/icons/filter-svgrepo-com.svg";
+  }
 }

@@ -1,19 +1,15 @@
 import { useEffect, useState } from 'react';
 import '../css/WeaponSelectBlock.css'
+import { getWeaponBaseData, getWeaponName } from '../helpers/helpers';
 
 export default function WeaponSelectBlock({ weaponID, onClick, data }) {
   const [weaponName, setWeaponName] = useState("");
   const [baseWeaponData, setBaseWeaponData] = useState(null);
   const [sharpnessValues, setSharpnessValues] = useState([10, 20, 30, 40]);
-  function convertToThreeDigits(number) {
-    return number.toString().padStart(3, '0');
-
-  }
+  
   useEffect(() => { // to handle data
-    setBaseWeaponData(data ?
-      data.charge_axe.base_data.param.find(obj => obj.base.base.base.base.id.ChargeAxe === weaponID) : null);
-    setWeaponName(data ?
-      data.charge_axe.name.entries.find(obj => obj.name === 'W_ChargeAxe_' + convertToThreeDigits(weaponID) + '_Name')?.content[1] : "name");
+    setBaseWeaponData(getWeaponBaseData(data, weaponID));
+    setWeaponName(getWeaponName(data, weaponID));
   }, []);
   useEffect(() => { // handle baseWeaponData stats
     setSharpnessValues(

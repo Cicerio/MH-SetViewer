@@ -1,6 +1,3 @@
-import { useState } from "react";
-// import weaponData from "https://gist.githubusercontent.com/Cicerio/f008eaeb97f4c8e6b68418b72c4a9488/raw/df23cfb8220c1ec8ff707b0d0517924a0356beca/mhrice_charge-axe.json";
-import weaponData from '../../mhrice-charge_axe-data.json'
 import '../css/WeaponBlock.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGripLinesVertical } from '@fortawesome/free-solid-svg-icons'
@@ -8,11 +5,29 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { getWeaponIconURL } from "../helpers/helpers";
 
 
-export default function WeaponBlock({onClick, ...props}) {
+export default function WeaponBlock({onClick, onClose, onInfo, ...props}) {
   /**
    * Id/Name style:
    * W_ChargeAxe_{ID}_{Name, Explain}
    */
+  const handleButtonClick = (e, type) => {
+    e.stopPropagation();
+    // console.log("WeaponBlock: handleButtonClick was called");
+    switch (type){
+      case true:
+        // console.log("WeaponBlock: Info was called") 
+        onInfo();
+        break
+      case false:
+        // console.log("WeaponBlock: Close was called")
+        onClose();
+        break;
+      default:
+        console.error("Error, unknown type of button click");
+    }
+
+  }
+
   return (
     <>
       <div className="gearItem-container" onClick={onClick}>
@@ -25,10 +40,12 @@ export default function WeaponBlock({onClick, ...props}) {
               {props.name}
             </div>
           )}
-          <button className="info-button" aria-label="info">
+          <button className="info-button" aria-label="info" 
+          onClick={(e) => handleButtonClick(e, true)}>
             <FontAwesomeIcon icon={faGripLinesVertical} />
           </button>
-          <button className="clear-button" aria-label="clear">
+          <button className="clear-button" aria-label="clear" 
+          onClick={(e) => handleButtonClick(e, false)}>
             <FontAwesomeIcon icon={faXmark} />
           </button>
         </div>

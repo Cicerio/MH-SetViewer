@@ -1,8 +1,9 @@
 import './css/builderApp.css';
 import React, { useState, useEffect } from 'react';
-import { convertToThreeDigits, getWeaponName, getWeaponBaseData } 
-from './helpers/helpers';
+import { convertToThreeDigits, getWeaponName, getWeaponBaseData, getIconURL, getEquipmentBaseData }
+  from './helpers/helpers';
 
+import InfoTab from './components/InfoTab';
 import PopupWindow from './components/PopupWindow';
 import WeaponBlock from './components/WeaponBlock';
 import ArmorBlock from './components/ArmorBlock';
@@ -20,23 +21,73 @@ export default function BuilderApp() {
   // States dealing with data
   const [weaponData, setWeaponData] = useState(null);
   const [baseWeaponData, setBaseWeaponData] = useState(null);
-  const [weaponID, setWeaponID] = useState(0);
+  const [weaponID, setWeaponID] = useState(null);
   const [weaponName, setWeaponName] = useState('');
   const [weaponType, setWeaponType] = useState(10);
   const [weaponBaseStats, setWeaponBaseStats] = useState({
     rarity: null,
     atk: null,
     aff: null,
-    def_bonus:null,
-    sharpness_block:[
-      0, 0, 0, 0, 0, 0, 0
-    ],
-    
+    element_type: null,
+    element_value: null,
+    def_bonus: null,
+    sharpness_block: null,
   })
 
   const [armorData, setArmorData] = useState(null);
   const [armorIDs, setArmorIDs] = useState([null, null, null, null, null]);
+  const [prevArmorIDs, setPrevArmorIDs] = useState([null, null, null, null, null]);
   const [armorNames, setArmorNames] = useState(['', '', '', '', ''])
+  const [armorDefenses, setArmorDefenses] = useState([
+    {
+      raw: null,
+      fire: null,
+      water: null,
+      thunder: null,
+      ice: null,
+      dragon: null,
+    },
+    {
+      raw: null,
+      fire: null,
+      water: null,
+      thunder: null,
+      ice: null,
+      dragon: null,
+    },
+    {
+      raw: null,
+      fire: null,
+      water: null,
+      thunder: null,
+      ice: null,
+      dragon: null,
+    },
+    {
+      raw: null,
+      fire: null,
+      water: null,
+      thunder: null,
+      ice: null,
+      dragon: null,
+    },
+    {
+      raw: null,
+      fire: null,
+      water: null,
+      thunder: null,
+      ice: null,
+      dragon: null,
+    }
+  ]);
+  const [totalDefenses, setTotalDefenses] = useState({
+      raw: null,
+      fire: null,
+      water: null,
+      thunder: null,
+      ice: null,
+      dragon: null,
+    })
 
   useEffect(() => { //  Loading raw JSON data
     const fetchData = async () => { // fetching armor and weapon data
@@ -74,8 +125,11 @@ export default function BuilderApp() {
   }, []);
 
   useEffect(() => { // to handle weaponID change
-    setBaseWeaponData(getWeaponBaseData(weaponData, weaponID));
-    setWeaponName(getWeaponName(weaponData, weaponID));
+    if (weaponData, weaponID) {
+      setBaseWeaponData(getWeaponBaseData(weaponData, weaponID));
+      setWeaponName(getWeaponName(weaponData, weaponID));
+      handleWeaponStatChange(weaponData, weaponID);
+    }
   }, [weaponData, weaponID]);
 
   useEffect(() => { // handle armorID change
@@ -86,33 +140,67 @@ export default function BuilderApp() {
       "armor_waist_name_msg",
       "armor_leg_name_msg"]
     const armorTypes = ["Head", "Chest", "Arm", "Waist", "Leg"];
+    //Changes names
     // maps the ids to the names, and creates a new armorName array
     let newArmorNames = armorIDs.map((element, index) => {
       if (element !== null) {
         const nameID = convertToThreeDigits(element);
-        console.log(nameID);
         const nameData = armorData[armorTypeRefs[index]];
-        console.log(nameData);
         let armorName = nameData ? nameData.entries.find(obj => obj.name === 'A_' + [armorTypes[index]] + '_' + nameID + '_Name')?.content[1] : "unfound";
-        console.log(armorName);
         return armorName
       } else {
-        console.log("There's no element? " + element)
         return element;
       }
     });
-
     setArmorNames(newArmorNames);
-    console.log("New armor names: " + newArmorNames);
+
+    // Getting armor defenses stats
+    const changedArmorIDs = armorIDs.map((id, index) => {
+      if (id !== prevArmorIDs[index]) {
+        return index;
+      }
+      return null;
+    });
+    console.log(changedArmorIDs);
     console.log(armorIDs);
+    let newDefensesBlock = armorDefenses;
+    changedArmorIDs.forEach((index) => {
+      if (changedArmorIDs[index] != null) {
+        console.log(`ArmorID at index ${index} has changed to ${armorIDs[index]}`);
+        const armorBaseData = getEquipmentBaseData(armorData, armorIDs[index], index);
+        if(armorBaseData){
+          const newDefenses = {
+            raw: armorBaseData.def_val,
+            fire: armorBaseData.fire_reg_val,
+            water: armorBaseData.water_reg_val,
+            thunder: armorBaseData.thunder_reg_val,
+            ice: armorBaseData.ice_reg_val,
+            dragon: armorBaseData.dragon_reg_val,
+          }
+          newDefensesBlock[index] = newDefenses;
+        }
+      }
+    });
+    setArmorDefenses(newDefensesBlock);
+    if(newDefensesBlock){
+      const compressedDefenses = newDefensesBlock.reduce((acc, obj) => {
+        Object.keys(obj).forEach((key) => {
+          acc[key] = (acc[key] || 0) + obj[key];
+        });
+        return acc;
+      }, {});
+      console.log(compressedDefenses)
+      setTotalDefenses(compressedDefenses)
+    }
+    console.log("ArmorIDs changed!")
   }, [armorIDs]);
 
-  useEffect(() => { // FOR TESTING ONLY
-    console.log("Save Window State: " + isSaveWindowOpen +
-      ", \n Weapon Window State: " + isWeaponWindowOpen +
-      ", \n  Equip Window State: " + isEquipWindowOpen)
+  // useEffect(() => { // FOR TESTING ONLY
+  //   console.log("Save Window State: " + isSaveWindowOpen +
+  //     ", \n Weapon Window State: " + isWeaponWindowOpen +
+  //     ", \n  Equip Window State: " + isEquipWindowOpen)
 
-  }, [isSaveWindowOpen, isWeaponWindowOpen, isEquipWindowOpen])
+  // }, [isSaveWindowOpen, isWeaponWindowOpen, isEquipWindowOpen])
   const handleTabClick = (index) => {
     setSelectedTab(index);
   };
@@ -131,11 +219,10 @@ export default function BuilderApp() {
   }
   const handleWeaponClick = (id) => {
     setWeaponID(id);
-    console.log("Setting weapon ID to: " + id)
+    console.log("Setting weapon ID to: " + id);
     toggleWeaponWindowState();
   }
   const handleEquipmentClick = (id, type) => {
-    // setArmorIDs[type] = id;
     let newArmorIDs = armorIDs.map((element, index) => {
       if (index === type) {
         return id;
@@ -145,11 +232,92 @@ export default function BuilderApp() {
     })
     console.log("ARMOR BEING SET TO: " + id);
     console.log("TYPE OF ARMOR: " + type);
+    console.log(armorIDs);
+    console.log(newArmorIDs);
+
+    setPrevArmorIDs(armorIDs);
     setArmorIDs(newArmorIDs);
     // to close window after selection
     toggleEquipWindowState();
   }
 
+  const handleWeaponStatChange = (weaponData, weaponID) => {
+    let baseWeaponData = getWeaponBaseData(weaponData, weaponID);
+    if (baseWeaponData) {
+      let newBaseWeaponData = {
+        id: baseWeaponData.base.base.base.base.id.ChargeAxe,
+        rarity: baseWeaponData.base.base.base.base.rare_type,
+        atk: baseWeaponData.base.base.base.atk,
+        aff: baseWeaponData.base.base.base.critical_rate,
+        def_bonus: baseWeaponData.base.base.base.def_bonus,
+        element_type: baseWeaponData.base.base.main_element_type,
+        element_value: baseWeaponData.base.base.main_element_val,
+        sharpness_block: baseWeaponData.base.sharpness_val_list,
+      }
+      setWeaponBaseStats(newBaseWeaponData);
+    }
+  }
+
+  const handleCloseButton = (type, equipType = -1) => {
+    // console.log("handleCloseButton was called!");
+    switch (type) {
+      case 1:
+        console.log("clear weapon");
+        setWeaponID(-1);
+        break;
+      case 2:
+        console.log("clear equipment");
+        switch (equipType) {
+          case equipType <= 0, equipType >= 4:
+            console.log("No Equipment type selected");
+            break;
+          default:
+            const newClearedArmorIDs = armorIDs.map((element, i) => {
+              if (i === equipType) {
+                return null;
+              }
+              return element;
+            });
+            console.log("Armor ID to clear: " + equipType +
+              "\n Armor cleared to: " + newClearedArmorIDs[equipType])
+            setArmorIDs(newClearedArmorIDs);
+            break;
+        }
+        break;
+      default:
+        console.error("Error, wrong type for parameter 'type'")
+        break;
+    }
+  }
+
+  const handleInfoButton = (type, equipType = -1) => {
+    // console.log("handleCloseButton was called!");
+    switch (type) {
+      case 1:
+        console.log("weapon info called;");
+        break;
+      case 2:
+        // console.log("equipment info called;");
+        switch (equipType) {
+          case equipType <= 0, equipType >= 4:
+            console.log("No Equipment type selected");
+            break;
+          default:
+            console.log("Equipment info of type: " + equipType + " called;")
+            break;
+        }
+        break;
+      default:
+        console.error("Error, wrong type for parameter 'type'")
+        break;
+    }
+  }
+
+  const addRandomBuild = () => {
+    setWeaponID(68);
+    const randomArmorIDs = [1, 2, 3, 4, 5]
+    setArmorIDs(randomArmorIDs);
+  }
   const isEquipmentSelected = selectedTab === 0;
   const isStatsSelected = selectedTab === 1;
   const isSkillsSelected = selectedTab === 2;
@@ -187,31 +355,101 @@ export default function BuilderApp() {
       </div>
       {(isEquipmentSelected || isEverythingSelected) && (
         <section className='gear-container'>
-          <WeaponBlock onClick={toggleWeaponWindowState} weapType={weaponType} name={weaponName}></WeaponBlock>
-          <ArmorBlock armorType={"head"} name={armorNames[0]} onClick={toggleEquipWindowState}></ArmorBlock>
-          <ArmorBlock armorType={"chest"} name={armorNames[1]} onClick={toggleEquipWindowState}></ArmorBlock>
-          <ArmorBlock armorType={"arms"} name={armorNames[2]} onClick={toggleEquipWindowState}></ArmorBlock>
-          <ArmorBlock armorType={"waist"} name={armorNames[3]} onClick={toggleEquipWindowState}></ArmorBlock>
-          <ArmorBlock armorType={"legs"} name={armorNames[4]} onClick={toggleEquipWindowState}></ArmorBlock>
+          <WeaponBlock onClick={toggleWeaponWindowState} weapType={weaponType} name={weaponName}
+            onClose={() => handleCloseButton(1)} onInfo={() => handleInfoButton(1)} />
+          <ArmorBlock armorType={"head"} name={armorNames[0]} onClick={toggleEquipWindowState}
+            onClose={() => handleCloseButton(2, 0)} onInfo={() => handleInfoButton(2, 0)} />
+          <ArmorBlock armorType={"chest"} name={armorNames[1]} onClick={toggleEquipWindowState}
+            onClose={() => handleCloseButton(2, 1)} onInfo={() => handleInfoButton(2, 1)} />
+          <ArmorBlock armorType={"arms"} name={armorNames[2]} onClick={toggleEquipWindowState}
+            onClose={() => handleCloseButton(2, 2)} onInfo={() => handleInfoButton(2, 2)} />
+          <ArmorBlock armorType={"waist"} name={armorNames[3]} onClick={toggleEquipWindowState}
+            onClose={() => handleCloseButton(2, 3)} onInfo={() => handleInfoButton(2, 3)} />
+          <ArmorBlock armorType={"legs"} name={armorNames[4]} onClick={toggleEquipWindowState}
+            onClose={() => handleCloseButton(2, 4)} onInfo={() => handleInfoButton(2, 4)} />
         </section>
       )}
       <section className='stats-container'>
         {(isStatsSelected || isEverythingSelected) && (
           <div className='equipped-stats' >
             {/* maybe have these blocks be their own components */}
-            <div>
+            <InfoTab header='Attack Stats'>
               <ul className='attack-stats striped'>
-                <li>Attack (Raw): {baseWeaponData ? baseWeaponData.base.base.base.atk : "N/A"}</li>
-                <li>Affinity: {baseWeaponData ? baseWeaponData.base.base.base.critical_rate + "\%" : 0 + "\%"}</li>
-                {baseWeaponData.base.base.main_element_type !== "None" &&
-                  <li>{baseWeaponData.base.base.main_element_type} : {baseWeaponData.base.base.main_element_val}</li>
+                <li>
+                  <span>Attack (Raw)</span>
+                  <span>{weaponBaseStats.atk ? weaponBaseStats.atk : "NaN"}</span>
+                </li>
+                <li>
+                  <span>Affinity </span>
+                  <span>{weaponBaseStats.aff ? weaponBaseStats.aff + "\%" : "0\%"}</span>
+                </li>
+                <li>
+                  <span>Critical Damage Boost</span>
+                  <span>125%</span>
+                </li>
+                {weaponBaseStats.element_type && weaponBaseStats.element_type !== "None" &&
+                  <li>
+                    <span>{weaponBaseStats.element_type}</span>
+                    <span>{weaponBaseStats.element_value}</span>
+                  </li>
                 }
+                <li>
+                  <span>Sharpness</span>
+                  <div className='sharpness-bar sharpness-statgrid'>
+                    {weaponBaseStats.sharpness_block && (<>
+                      <img src={getIconURL("swordhilt")} alt="Sword hilt" className='swordhilt' />
+                      {weaponBaseStats.sharpness_block.map((number, index) => (
+                        <span key={index} className={`sharp-val-${index + 1}`} style={{ width: `${number * 0.75}px` }}>
+                        </span>
+                      ))}
+                    </>
+                    )}
+                  </div>
+                </li>
+
               </ul>
-            </div>
-            <br />
-            <h4>Defense</h4>
-            <div></div>
-            <br />
+            </InfoTab>
+            <InfoTab header='Defense'>
+              <ul className='defense-stats striped'>
+                <li>
+                  <span>Defense</span>
+                  <span>{(weaponBaseStats.def_bonus ? (weaponBaseStats.def_bonus + totalDefenses.raw) : totalDefenses.raw)
+                    + 0}</span>
+                </li>
+                <li className='element-defenses'>
+                  <ul className='striped'>
+                    <li>
+                      <span>Fire Resist</span>
+                      <span>{totalDefenses.fire}</span>
+                    </li>
+                    <li>
+                      <span>Water Resist</span>
+                      <span>{totalDefenses.water}</span>
+                    </li>
+                    <li>
+                      <span>Thunder Resist</span>
+                      <span>{totalDefenses.thunder}</span>
+                    </li>
+                    <li>
+                      <span>Ice Resist</span>
+                      <span>{totalDefenses.ice}</span>
+                    </li>
+                    <li>
+                      <span>Dragon Resist</span>
+                      <span>{totalDefenses.dragon}</span>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <span>Health </span>
+                  <span>100 (150)</span>
+                </li>
+                <li>
+                  <span>Stamina</span>
+                  <span>100 (150)</span>
+                </li>
+              </ul>
+            </InfoTab>
           </div>
         )}
         {(isSkillsSelected || isEverythingSelected) && (
@@ -219,17 +457,20 @@ export default function BuilderApp() {
             <div className='equipped-skills' >
               <br />
               <h4>
-                Skills
+                Skills - Not yet implemented
               </h4>
             </div>
           </section>
         )}
+        {/* <button onClick={() => addRandomBuild()}>Click here to add a random build!</button> */}
       </section>
       {/* Save tab popup */}
       <PopupWindow isOpen={isSaveWindowOpen} setIsOpen={setIsSaveWindowOpen} windowHeader={"Save Tab"}>
         <div
           className='save-window'>
-          Save some stuff?
+          Gonna have this be mostly copy paste json format.
+          Parse JSON via paste, give a block for copying it.
+          Very simple structure for saving, probably just IDs.
         </div>
       </PopupWindow>
       {/* Weapon tab popup */}

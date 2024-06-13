@@ -83,15 +83,20 @@ main.container {
   position:absolute;
   top: 34px;
   grid-column: 1 / 4;
-  margin-top: 8px;
+  margin-top: 16px;
   width:100%;
 }
 button{
   background: none;
     border: none;
+    border-radius:4px;
     outline: none;
     color: #969696;
     cursor: pointer;
+}
+button:hover{
+  background-color: var(--burgundy);
+  color: var(--goldenrod);
 }
 .selection-grid{
   display: grid;
@@ -101,6 +106,38 @@ button{
   overflow-y: auto;
   overflow-x: hidden;
 }
+ul.striped{
+  list-style: none;
+  padding: 2px;
+  margin: 0px 0px 16px 0px;
+}
+li.element-defenses{
+  background-color: var(--tekhelet);
+  padding: 4px;
+}
+li.element-defenses > ul.striped {
+  background-color: var(--russian-violet) !important;
+  margin-bottom: 0px !important;
+}
+ul.striped > li:not(.element-defenses) {
+  display:grid;
+  font-size: 0.90em;
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+  padding: 2px;
+}
+ul.striped > li:nth-child(even){
+  background-color: var(--russian-violet-lite);
+}
+div.sharpness-statgrid, .swordhilt{
+  height: 16px !important;
+  align-self: center;
+}
+div.sharpness-statgrid > span{
+  height:10px !important;
+  align-self: center;
+}
+
 
 @media screen and (min-width: 700px) {
   .tab-container {
