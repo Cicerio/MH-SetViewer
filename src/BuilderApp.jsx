@@ -428,12 +428,12 @@ export default function BuilderApp() {
         >
           Stats
         </div>
-        <div
+        {/* <div
           className={`tab ${selectedTab === 2 ? 'selected' : ''}`}
           onClick={() => handleTabClick(2)}
         >
           Skills
-        </div>
+        </div> */}
         <div
           className={'tab SaveWindow'}
           onClick={() => toggleSaveWindowState()}>
@@ -543,15 +543,15 @@ export default function BuilderApp() {
             </InfoTab>
           </div>
         )}
-        {(isSkillsSelected || isEverythingSelected) && (
-          <section className='skills-container'>
-            <div className='equipped-skills' >
-              <br />
-              <h4>
-                Skills - Not yet implemented
-              </h4>
-            </div>
-          </section>
+        {(isSkillsSelected || isEverythingSelected) && (<></>
+          // <section className='skills-container'>
+          //   <div className='equipped-skills' >
+          //     <br />
+          //     <h4>
+          //       Skills - Not yet implemented
+          //     </h4>
+          //   </div>
+          // </section>
         )}
         {/* <button onClick={() => addRandomBuild()}>Click here to add a random build!</button> */}
       </section>

@@ -73,7 +73,7 @@ main.container {
   height: 34px;
   display: grid;
   border-bottom: 4px solid var(--palatinate);
-  grid-template-columns: repeat(3, 1fr) 40px;
+  grid-template-columns: repeat(2, 1fr) 40px;
   grid-gap: 4px;
 
 }
