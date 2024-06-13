@@ -1,6 +1,6 @@
 import './css/builderApp.css';
 import React, { useState, useEffect } from 'react';
-import { convertToThreeDigits, getWeaponName, getWeaponBaseData, getIconURL, getEquipmentBaseData, getTrueRawAttack }
+import { convertToThreeDigits, getWeaponName, getWeaponBaseData, getIconURL, getEquipmentBaseData, getTrueRawAttack, isValidJSON }
   from './helpers/helpers';
 
 import InfoTab from './components/InfoTab';
@@ -18,6 +18,9 @@ export default function BuilderApp() {
   const [isSaveWindowOpen, setIsSaveWindowOpen] = useState(false);
   const [isWeaponWindowOpen, setIsWeaponWindowOpen] = useState(false);
   const [isEquipWindowOpen, setIsEquipWindowOpen] = useState(false);
+  const [showSaveCodeToast, setShowSaveCodeToast] = useState(false);
+  const [showLoadCodeToast, setShowLoadCodeToast] = useState(false);
+  const [showLoadErrorToast, setShowLoadErrorToast] = useState(false);
   // States dealing with data
   const [weaponData, setWeaponData] = useState(null);
   const [baseWeaponData, setBaseWeaponData] = useState(null);
@@ -89,6 +92,7 @@ export default function BuilderApp() {
     dragon: null,
   })
 
+  const [jsonCode, setJsonCode] = useState(null);
   useEffect(() => { //  Loading raw JSON data
     const fetchData = async () => { // fetching armor and weapon data
       try {
@@ -195,6 +199,69 @@ export default function BuilderApp() {
     console.log("ArmorIDs changed!")
   }, [armorIDs]);
 
+  useEffect(() => {
+    const jsonValue = JSON.stringify({ weaponID, armorIDs });
+    setJsonCode(jsonValue);
+  }, [weaponID, armorIDs]);
+
+  useEffect(() => {
+    const copyButton = document.getElementById('copyButton');
+    const saveButton = document.getElementById('saveButton');
+    const jsonDisplay = document.getElementById('jsonDisplay');
+    const jsonInput = document.getElementById('jsonInput');
+
+
+    if (copyButton && saveButton && jsonDisplay && jsonInput) {
+      const copyJSON = () => {
+        const text = jsonDisplay.value;
+        navigator.clipboard.writeText(text)
+          .then(() => {
+            // Copy successful
+            handleSaveButtonClick();
+            console.log('JSON copied to clipboard');
+          })
+          .catch((error) => {
+            // Copy failed
+            console.error('Failed to copy JSON to clipboard', error);
+          });
+      };
+
+      const saveJSON = () => {
+        const text = jsonInput.value;
+        if(isValidJSON(text)){
+          setJsonCode(text);
+          handleLoadButtonClick();
+        }else{
+          console.error("Error: Trying to load Invalid JSON code!")
+          handleLoadError();
+        }
+      };
+
+      copyButton.addEventListener('click', copyJSON);
+      saveButton.addEventListener('click', saveJSON);
+
+      return () => {
+        copyButton.removeEventListener('click', copyJSON);
+        saveButton.removeEventListener('click', saveJSON);
+      };
+    }
+  }, [isSaveWindowOpen]);
+  useEffect(() => {
+    if (jsonCode) {
+      try {
+        const jsonObject = JSON.parse(jsonCode);
+        console.log(jsonObject);
+        setWeaponID(jsonObject.weaponID);
+        setArmorIDs(jsonObject.armorIDs);
+        console.log(jsonObject.armorIDs);
+      } catch (error) {
+        console.error('Failed to parse JSON:', error);
+        // setJsonCode({
+        //   weaponID:weaponID,
+        //   armorIDs:armorIDs})
+      }
+    }
+  }, [jsonCode])
   // useEffect(() => { // FOR TESTING ONLY
   //   console.log("Save Window State: " + isSaveWindowOpen +
   //     ", \n Weapon Window State: " + isWeaponWindowOpen +
@@ -203,6 +270,25 @@ export default function BuilderApp() {
   // }, [isSaveWindowOpen, isWeaponWindowOpen, isEquipWindowOpen])
   const handleTabClick = (index) => {
     setSelectedTab(index);
+  };
+  const handleSaveButtonClick = () => {
+    setShowSaveCodeToast(true);
+    setTimeout(() => {
+      setShowSaveCodeToast(false);
+    }, 3000);
+  };
+
+  const handleLoadButtonClick = () => {
+    setShowLoadCodeToast(true);
+    setTimeout(() => {
+      setShowLoadCodeToast(false);
+    }, 3000);
+  };
+  const handleLoadError = () => {
+    setShowLoadErrorToast(true);
+    setTimeout(() => {
+      setShowLoadErrorToast(false);
+    }, 3000);
   };
   /**
    * Sets Save Window shown/hidden state
@@ -322,6 +408,7 @@ export default function BuilderApp() {
   const isStatsSelected = selectedTab === 1;
   const isSkillsSelected = selectedTab === 2;
   const isEverythingSelected = selectedTab === -1;
+
 
   if (!weaponData || !armorData) {
     return <div>Loading...</div>;
@@ -469,12 +556,30 @@ export default function BuilderApp() {
         {/* <button onClick={() => addRandomBuild()}>Click here to add a random build!</button> */}
       </section>
       {/* Save tab popup */}
-      <PopupWindow isOpen={isSaveWindowOpen} setIsOpen={setIsSaveWindowOpen} windowHeader={"Save Tab"}>
+      <PopupWindow isOpen={isSaveWindowOpen} setIsOpen={setIsSaveWindowOpen} windowHeader={"Save / Load"}>
         <div
           className='save-window'>
-          Gonna have this be mostly copy paste json format.
-          Parse JSON via paste, give a block for copying it.
-          Very simple structure for saving, probably just IDs.
+          <hr />
+          <div className='save-box'>
+            <span>Current build code:</span>
+            <p id='save-subtitle'>Save this, it will be cleared on page reload!</p>
+            <textarea id="jsonDisplay" className='save-inputs ' value={jsonCode} readOnly />
+            <br />
+            <button id="copyButton" className='save-buttons '>Copy code</button>
+            {showSaveCodeToast && <span className='event-toast'>Code copied to clipboard!</span>}
+            <p></p>
+          </div>
+          <hr/>
+          <div className='save-box'>
+            <span>Paste saved build code here:</span>
+            <p id='save-subtitle'>A fantastic build awaits, with just one Ctrl/CMD-V!</p>
+            <textarea id="jsonInput" className='save-inputs ' placeholder="Paste your JSON code here" />
+            <br />
+            <button id="saveButton" className='save-buttons '>Paste build</button>
+            {showLoadCodeToast && <span className='event-toast'>Build code loaded successfully!</span>}
+            {showLoadErrorToast && <span className='error-toast'>Error: Invalid JSON format!</span>}
+          </div>
+          <hr/>
         </div>
       </PopupWindow>
       {/* Weapon tab popup */}

@@ -121,3 +121,11 @@ export function getIconURL(stat) {
       return "/icons/filter-svgrepo-com.svg";
   }
 }
+export function isValidJSON(jsonString) {
+  try {
+      JSON.parse(jsonString);
+      return true;
+  } catch (error) {
+      return false;
+  }
+}

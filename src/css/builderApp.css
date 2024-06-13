@@ -98,6 +98,9 @@ button:hover{
   background-color: var(--burgundy);
   color: var(--goldenrod);
 }
+.popup-window-content{
+  overflow-x:hidden;
+}
 .selection-grid{
   display: grid;
   grid-template-columns: auto;
@@ -105,6 +108,18 @@ button:hover{
   padding: 8px;
   overflow-y: auto;
   overflow-x: hidden;
+}
+.popup-window-content::-webkit-scrollbar {
+  width: 12px; /* Set the width of the scrollbar */
+}
+.selection-grid > *{
+  overflow-x: hidden;
+}
+.popup-window-content::-webkit-scrollbar-thumb {
+  background-color: var(--tekhelet); /* Set the color of the scrollbar thumb */
+}
+.popup-window-content::-moz-scrollbar-thumb {
+  background-color: var(--tekhelet); /* Set the color of the scrollbar thumb */
 }
 ul.striped{
   list-style: none;
@@ -137,8 +152,43 @@ div.sharpness-statgrid > span{
   height:10px !important;
   align-self: center;
 }
-
-
+hr{
+  width: 100%;
+  border-color: var(--goldenrod);
+}
+#save-subtitle{
+  font-size: smaller;
+  font-style: italic;
+  color:var(--plum-web)
+}
+.save-inputs, .save-buttons{
+  background-color: var(--tekhelet);
+  border-radius: 8px;
+  color: var(--isabelline);
+}
+.save-buttons{
+  padding:5px;
+  background-color: var(--tekhelet);
+}
+.save-inputs{
+  width: 98%;
+  justify-self: center;
+  resize: vertical;
+}
+.save-box{
+  margin: 10px 0px;
+}
+.event-toast, .error-toast{
+  font-size: smaller;
+  font-style: italic;
+  margin: 0px 10px;
+}
+.event-toast{
+  color:var(--goldenrod)
+}
+.error-toast{
+  color: var(--plum-web);
+}
 @media screen and (min-width: 700px) {
   .tab-container {
     display: none;
