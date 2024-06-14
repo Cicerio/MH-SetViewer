@@ -129,7 +129,7 @@ export default function BuilderApp() {
   }, []);
 
   useEffect(() => { // to handle weaponID change
-    if (weaponData, weaponID) {
+    if (weaponData != null, weaponID != null) {
       setBaseWeaponData(getWeaponBaseData(weaponData, weaponID));
       setWeaponName(getWeaponName(weaponData, weaponID));
       handleWeaponStatChange(weaponData, weaponID);
