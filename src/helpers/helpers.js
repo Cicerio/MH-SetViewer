@@ -124,7 +124,7 @@ export function getEquipmentBaseData(armorData, armorID, type) {
 export function getIconURL(stat) {
   switch (stat) {
     case "swordhilt":
-      return "/icons/filter-svgrepo-com.svg";
+      return "icons/filter-svgrepo-com.svg";
   }
 }
 export function isValidJSON(jsonString) {
