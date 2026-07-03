@@ -25,7 +25,13 @@ export function getWeaponName(weaponData, weaponID) {
       obj.name === 'W_ChargeAxe_' + convertToThreeDigits(weaponID) + '_Name')?.content[1]
     : "unfound";
 }
-
+/**
+ * Retrieves the base data of a weapon from the given weaponData based on the weaponID.
+ *
+ * @param {Object} weaponData - The data containing information about the weapons.
+ * @param {number} weaponID - The ID of the weapon.
+ * @return {Object|null} The base data of the weapon if found, otherwise null.
+ */
 export function getWeaponBaseData(weaponData, weaponID) {
   return weaponData
     ? weaponData.charge_axe.base_data.param.find(obj => obj.base.base.base.base.id.ChargeAxe === weaponID)

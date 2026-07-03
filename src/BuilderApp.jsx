@@ -93,6 +93,10 @@ export default function BuilderApp() {
   })
 
   const [jsonCode, setJsonCode] = useState(null);
+  /**
+   * Hook that handles loading the JSON data.
+   * Refreshes on page load.
+   */
   useEffect(() => { //  Loading raw JSON data
     const fetchData = async () => { // fetching armor and weapon data
       try {
@@ -108,9 +112,7 @@ export default function BuilderApp() {
     };
 
     fetchData();
-  }, []);
 
-  useEffect(() => { //for handling selected tabs
     const handleResize = () => {
       if (window.innerWidth >= 700) {
         setSelectedTab(-1);
@@ -127,7 +129,9 @@ export default function BuilderApp() {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-
+/**
+ * Hook that handles
+ */
   useEffect(() => { // to handle weaponID change
     if (weaponData != null, weaponID != null) {
       setBaseWeaponData(getWeaponBaseData(weaponData, weaponID));
@@ -246,6 +250,9 @@ export default function BuilderApp() {
       };
     }
   }, [isSaveWindowOpen]);
+  /**
+   * A hook that loads the 
+   */
   useEffect(() => {
     if (jsonCode) {
       try {
@@ -284,6 +291,9 @@ export default function BuilderApp() {
       setShowLoadCodeToast(false);
     }, 3000);
   };
+  /**
+   * Toggles the load error toast - used for when data doesn't load
+   */
   const handleLoadError = () => {
     setShowLoadErrorToast(true);
     setTimeout(() => {
@@ -555,6 +565,11 @@ export default function BuilderApp() {
         )}
         {/* <button onClick={() => addRandomBuild()}>Click here to add a random build!</button> */}
       </section>
+      {isEverythingSelected && 
+      <div className='desktop-save-button' onClick={() => toggleSaveWindowState()}>
+        <FontAwesomeIcon icon={faFloppyDisk} />
+      </div>
+      }
       {/* Save tab popup */}
       <PopupWindow isOpen={isSaveWindowOpen} setIsOpen={setIsSaveWindowOpen} windowHeader={"Save / Load"}>
         <div
@@ -583,13 +598,13 @@ export default function BuilderApp() {
         </div>
       </PopupWindow>
       {/* Weapon tab popup */}
-      <PopupWindow isOpen={isWeaponWindowOpen} setIsOpen={setIsWeaponWindowOpen} windowHeader={"Select Weapon"}>
+      <PopupWindow  isOpen={isWeaponWindowOpen} setIsOpen={setIsWeaponWindowOpen} windowHeader={"Select Weapon"}>
         <div className='weapon-window'>
           <SelectionGrid type="weapon" data={weaponData} onClick={handleWeaponClick}></SelectionGrid>
         </div>
       </PopupWindow>
       {/* Equipment tab popup */}
-      <PopupWindow isOpen={isEquipWindowOpen} setIsOpen={setIsEquipWindowOpen} windowHeader={"Select your equipment!"}>
+      <PopupWindow  isOpen={isEquipWindowOpen} setIsOpen={setIsEquipWindowOpen} windowHeader={"Select your equipment!"}>
         <div className='equip-window'>
           <SelectionGrid type="equipment" data={armorData} onClick={handleEquipmentClick}></SelectionGrid>
         </div>
