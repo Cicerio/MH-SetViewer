@@ -304,11 +304,16 @@ export default function BuilderApp() {
   //     ", \n  Equip Window State: " + isEquipWindowOpen)
 
   // }, [isSaveWindowOpen, isWeaponWindowOpen, isEquipWindowOpen])
-  // Switches the active mobile tab (Equipment/Stats/Skills)
+  /**
+   * Switches the active mobile tab (Equipment/Stats/Skills).
+   * @param {number} index - Tab index to select (0=Equipment, 1=Stats, 2=Skills, -1=everything)
+   */
   const handleTabClick = (index) => {
     setSelectedTab(index);
   };
-  // Shows the "code copied" toast for 3 seconds
+  /**
+   * Shows the "code copied" toast for 3 seconds.
+   */
   const handleSaveButtonClick = () => {
     setShowSaveCodeToast(true);
     setTimeout(() => {
@@ -316,7 +321,9 @@ export default function BuilderApp() {
     }, 3000);
   };
 
-  // Shows the "build loaded" toast for 3 seconds
+  /**
+   * Shows the "build loaded" toast for 3 seconds.
+   */
   const handleLoadButtonClick = () => {
     setShowLoadCodeToast(true);
     setTimeout(() => {
@@ -324,7 +331,8 @@ export default function BuilderApp() {
     }, 3000);
   };
   /**
-   * Toggles the load error toast - used for when data doesn't load
+   * Shows the "invalid JSON format" error toast for 3 seconds. Triggered when a pasted
+   * build code fails JSON validation (see saveJSON in the Save/Load popup wiring effect above).
    */
   const handleLoadError = () => {
     setShowLoadErrorToast(true);
@@ -333,28 +341,40 @@ export default function BuilderApp() {
     }, 3000);
   };
   /**
-   * Sets Save Window shown/hidden state
+   * Toggles the Save/Load popup open/closed.
    */
   const toggleSaveWindowState = () => {
     setIsSaveWindowOpen(!isSaveWindowOpen);
   }
+  /**
+   * Toggles the weapon selection popup open/closed.
+   */
   const toggleWeaponWindowState = () => {
     setIsWeaponWindowOpen(!isWeaponWindowOpen);
   }
 
+  /**
+   * Toggles the equipment selection popup open/closed.
+   */
   const toggleEquipWindowState = () => {
     setIsEquipWindowOpen(!isEquipWindowOpen);
   }
-  // Called from the weapon SelectionGrid popup when a weapon is picked
+  /**
+   * Called from the weapon SelectionGrid popup when a weapon is picked.
+   * @param {number} id - Selected weapon's ID
+   */
   const handleWeaponClick = (id) => {
     setWeaponID(id);
     console.log("Setting weapon ID to: " + id);
     toggleWeaponWindowState();
   }
-  // Called from the equipment SelectionGrid popup when an armor piece is picked.
-  // `type` is the slot index (0=Head..4=Leg); only that slot in armorIDs is updated.
-  // Note: the popup is left open (toggleEquipWindowState call below is commented out)
-  // so multiple pieces can be picked without reopening the window each time.
+  /**
+   * Called from the equipment SelectionGrid popup when an armor piece is picked.
+   * Note: the popup is left open (toggleEquipWindowState call below is commented out)
+   * so multiple pieces can be picked without reopening the window each time.
+   * @param {number} id - Selected armor piece's ID
+   * @param {number} type - Slot index (0=Head..4=Leg); only that slot in armorIDs is updated
+   */
   const handleEquipmentClick = (id, type) => {
     let newArmorIDs = armorIDs.map((element, index) => {
       if (index === type) {
@@ -374,10 +394,14 @@ export default function BuilderApp() {
     // toggleEquipWindowState();
   }
 
-  // Digs the selected weapon's stats out of the deeply nested raw JSON structure and
-  // flattens them into weaponBaseStats. The nested `base.base.base.base` chain and the
-  // hardcoded `.ChargeAxe` key reflect the raw MHRise data format for this weapon type
-  // (see the weaponType=10/Charge Axe note near the top of the component).
+  /**
+   * Digs the selected weapon's stats out of the deeply nested raw JSON structure and
+   * flattens them into weaponBaseStats. The nested `base.base.base.base` chain and the
+   * hardcoded `.ChargeAxe` key reflect the raw MHRise data format for this weapon type
+   * (see the weaponType=10/Charge Axe note near the top of the component).
+   * @param {object} weaponData - Full raw weapon JSON data
+   * @param {number} weaponID - ID of the selected weapon
+   */
   const handleWeaponStatChange = (weaponData, weaponID) => {
     let baseWeaponData = getWeaponBaseData(weaponData, weaponID);
     if (baseWeaponData) {
@@ -395,8 +419,12 @@ export default function BuilderApp() {
     }
   }
 
-  // Handles the "x" close button on a WeaponBlock (type=1) or ArmorBlock (type=2, equipType=slot index).
-  // Clears the corresponding weapon/armor slot.
+  /**
+   * Handles the "x" close button on a WeaponBlock (type=1) or ArmorBlock (type=2, equipType=slot index).
+   * Clears the corresponding weapon/armor slot.
+   * @param {number} type - 1 for weapon, 2 for armor
+   * @param {number} [equipType=-1] - Armor slot index (0=Head..4=Leg), only used when type=2
+   */
   const handleCloseButton = (type, equipType = -1) => {
     // console.log("handleCloseButton was called!");
     switch (type) {
@@ -432,8 +460,12 @@ export default function BuilderApp() {
     }
   }
 
-  // Handles the "info" button on a WeaponBlock/ArmorBlock. Currently just logs — no info
-  // popup is actually implemented yet (same equipType comma-operator quirk as handleCloseButton above).
+  /**
+   * Handles the "info" button on a WeaponBlock/ArmorBlock. Currently just logs — no info
+   * popup is actually implemented yet (same equipType comma-operator quirk as handleCloseButton above).
+   * @param {number} type - 1 for weapon, 2 for armor
+   * @param {number} [equipType=-1] - Armor slot index (0=Head..4=Leg), only used when type=2
+   */
   const handleInfoButton = (type, equipType = -1) => {
     // console.log("handleCloseButton was called!");
     switch (type) {
@@ -457,8 +489,10 @@ export default function BuilderApp() {
     }
   }
 
-  // Dev/test helper that fills in a fixed weapon + armor set; not currently wired to any UI
-  // (its button in the JSX below is commented out).
+  /**
+   * Dev/test helper that fills in a fixed weapon + armor set; not currently wired to any UI
+   * (its button in the JSX below is commented out).
+   */
   const addRandomBuild = () => {
     setWeaponID(68);
     const randomArmorIDs = [1, 2, 3, 4, 5]

@@ -14,9 +14,6 @@ Features:
   including proper damage modified for sharpness levels.
 
 ##### TODO:
-07/25/06 -
-Multiple monster hunters on the horizon
-* Tidy up MHRise tab
 * Write detailed tooltips for stats and weapons.
 * Add support for Sunbreak armors, - INCOMPLETE - WIP
     - Maybe even have a Sunbreak-Iceborne mode swapping - After finishing sunbreak support
@@ -27,7 +24,19 @@ Multiple monster hunters on the horizon
   - Talismans
   - Sunbreak armors
     * Also Qurio armor, weapon, and talisman support
+07/25/06 -
+Multiple monster hunters on the horizon
+* Tidy up MHRise tab
+* BUGFIXING!
+  - clearing armor/weapons doesn't clear stats. fix that
+    * handleWeaponStatChange isn't sensing the -1 weaponID.
+      + Also, monster hunter doens't let you unequip weapon, so maybe have the unnecessary stats vanish whenever they are unused?
+  - sharpness gauge in stats doesn't shrink properly.
+    * Also add string form (30 hits of White, 15 hits of Green, etc)
+* Theme overhaul for Rise, make it more like the game (and cleaner)
 * Add support for MH4U, MHGU, and MHWilds and World
+  - MHGU and MH4U will require different skill systems.
+  - MHWilds requires two weapons.
 ## Installation
 1. Clone this repository.
 2. Navigate to the project directory.
