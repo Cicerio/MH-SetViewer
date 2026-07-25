@@ -14,6 +14,9 @@ Features:
   including proper damage modified for sharpness levels.
 
 ##### TODO:
+07/25/06 -
+Multiple monster hunters on the horizon
+* Tidy up MHRise tab
 * Write detailed tooltips for stats and weapons.
 * Add support for Sunbreak armors, - INCOMPLETE - WIP
     - Maybe even have a Sunbreak-Iceborne mode swapping - After finishing sunbreak support
@@ -24,7 +27,7 @@ Features:
   - Talismans
   - Sunbreak armors
     * Also Qurio armor, weapon, and talisman support
-
+* Add support for MH4U, MHGU, and MHWilds and World
 ## Installation
 1. Clone this repository.
 2. Navigate to the project directory.

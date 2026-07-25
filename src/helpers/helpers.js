@@ -125,7 +125,14 @@ export function getIconURL(stat) {
   switch (stat) {
     case "swordhilt":
       return "icons/filter-svgrepo-com.svg";
-  }
+    case (null || undefined): 
+      return "icons/default.svg"
+    default: 
+      case (stat.startsWith("elm")):
+        return "icons/Custom Icons/stats/elm-"+ stat.toLowerCase() + ".svg"
+      
+  } 
+
 }
 export function isValidJSON(jsonString) {
   try {
