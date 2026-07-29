@@ -420,6 +420,21 @@ export default function BuilderApp() {
   }
 
   /**
+   * Resets weaponBaseStats back to its empty/null state — used when the weapon slot is cleared.
+   */
+  const clearWeaponBaseStats = () => {
+    setWeaponBaseStats({
+      rarity: null,
+      atk: null,
+      aff: null,
+      element_type: null,
+      element_value: null,
+      def_bonus: null,
+      sharpness_block: null,
+    });
+  }
+
+  /**
    * Handles the "x" close button on a WeaponBlock (type=1) or ArmorBlock (type=2, equipType=slot index).
    * Clears the corresponding weapon/armor slot.
    * @param {number} type - 1 for weapon, 2 for armor
@@ -431,6 +446,7 @@ export default function BuilderApp() {
       case 1:
         console.log("clear weapon");
         setWeaponID(-1);
+        clearWeaponBaseStats();
         break;
       case 2:
         console.log("clear equipment");
@@ -560,18 +576,24 @@ export default function BuilderApp() {
             {/* maybe have these blocks be their own components */}
             <InfoTab header='Attack Stats'>
               <ul className='attack-stats striped'>
-                <li>
-                  <span>Attack (Raw)</span>
-                  <span>{weaponBaseStats.atk ? weaponBaseStats.atk : "NaN"}</span>
-                </li>
-                <li>
-                  <span>Affinity</span>
-                  <span>{weaponBaseStats.aff ? weaponBaseStats.aff + "\%" : "0\%"}</span>
-                </li>
-                <li>
-                  <span>Critical Damage Boost</span>
-                  <span>125%</span>
-                </li>
+                {weaponBaseStats.atk != null &&
+                  <li>
+                    <span>Attack (Raw)</span>
+                    <span>{weaponBaseStats.atk}</span>
+                  </li>
+                }
+                {weaponBaseStats.aff != null &&
+                  <li>
+                    <span>Affinity</span>
+                    <span>{weaponBaseStats.aff}%</span>
+                  </li>
+                }
+                {weaponBaseStats.aff != null &&
+                  <li>
+                    <span>Critical Damage Boost</span>
+                    <span>125%</span>
+                  </li>
+                }
                 {weaponBaseStats.element_type && weaponBaseStats.element_type !== "None" &&
                   <li style={{gridTemplateColumns: 'auto 60% auto'}}>
                     <span>Element:</span>
@@ -579,24 +601,25 @@ export default function BuilderApp() {
                     <span>{weaponBaseStats.element_value}</span>
                   </li>
                 }
-                <li>
-                  <span>True Raw</span>
-                  <span>{getTrueRawAttack(weaponBaseStats.atk, weaponBaseStats.sharpness_block)}</span>
-                </li>
-                <li>
-                  <span>Sharpness</span>
-                  {/* Renders one colored segment per sharpness level (red/orange/.../purple), width scaled from its raw hit count */}
-                  <div className='sharpness-bar sharpness-statgrid'>
-                    {weaponBaseStats.sharpness_block && (<>
+                {weaponBaseStats.atk != null &&
+                  <li>
+                    <span>True Raw</span>
+                    <span>{getTrueRawAttack(weaponBaseStats.atk, weaponBaseStats.sharpness_block)}</span>
+                  </li>
+                }
+                {weaponBaseStats.sharpness_block != null &&
+                  <li>
+                    <span>Sharpness</span>
+                    {/* Renders one colored segment per sharpness level (red/orange/.../purple), width scaled from its raw hit count */}
+                    <div className='sharpness-bar sharpness-statgrid'>
                       <img src={getIconURL("swordhilt")} alt="Sword hilt" className='swordhilt' onError={getIconURL()}/>
                       {weaponBaseStats.sharpness_block.map((number, index) => (
                         <span key={index} className={`sharp-val-${index + 1}`} style={{ width: `${number * 0.75}px` }}>
                         </span>
                       ))}
-                    </>
-                    )}
-                  </div>
-                </li>
+                    </div>
+                  </li>
+                }
 
               </ul>
             </InfoTab>

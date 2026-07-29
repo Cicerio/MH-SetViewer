@@ -37,6 +37,24 @@ Multiple monster hunters on the horizon
 * Add support for MH4U, MHGU, and MHWilds and World
   - MHGU and MH4U will require different skill systems.
   - MHWilds requires two weapons.
+
++ Priority list!
+  1. Function - Make it work for Rise.
+    - QoL Toggle between Select all equipment vs Click head =  only show head and vice versa
+    - Add support for every weapon.
+      - Various stats for each weapon type.
+        + Charge Blade - Phial type
+        + Gunlance - Shell type (how many too)
+        + Insect Glaive - Add slot for Bug Buddy and give accompanying stats
+        + Bowguns - oh boy
+          * Bow - Coatings
+          * Bowguns
+            - Ammo types
+            - Special ammo type
+  2. Make it work for different games.
+    - Wilds and World skills work mostly the same
+      - MH4U and GU have different skill type
+
 ## Installation
 1. Clone this repository.
 2. Navigate to the project directory.
