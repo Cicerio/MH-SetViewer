@@ -14,7 +14,11 @@ Features:
   including proper damage modified for sharpness levels.
 
 ##### TODO:
+* 073026 - Armors displaying only in sample set, need to fix.
+  - Armors probably wanna be sorted by LR, HR, and MR - Need 3 tabs with them.
 * Write detailed tooltips for stats and weapons.
+  - They are written! Need to find and display them.
+
 * Add support for Sunbreak armors, - INCOMPLETE - WIP
     - Maybe even have a Sunbreak-Iceborne mode swapping - After finishing sunbreak support
 * Support for more weapons

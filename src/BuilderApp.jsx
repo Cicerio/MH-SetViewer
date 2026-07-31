@@ -114,11 +114,16 @@ export default function BuilderApp() {
   useEffect(() => { //  Loading raw JSON data
     const fetchData = async () => { // fetching armor and weapon data
       try {
-        const response = await fetch('https://gist.githubusercontent.com/Cicerio/f008eaeb97f4c8e6b68418b72c4a9488/raw/1fa7d2f49cc499c9bd8569f0cff44b5435de359b/mhrice_charge-axe.json');
+        // const response = await fetch('https://gist.githubusercontent.com/Cicerio/f008eaeb97f4c8e6b68418b72c4a9488/raw/1fa7d2f49cc499c9bd8569f0cff44b5435de359b/mhrice_charge-axe.json');
+        const response = await fetch(import.meta.env.BASE_URL + 'game_data/mhrice-charge_axe-data.json');
+        console.log(import.meta.env.BASE_URL + 'game_data/mhrice-charge_axe-data.json')
         const jsonData = await response.json();
         setWeaponData(jsonData);
-        const responseArmor = await fetch('https://gist.githubusercontent.com/Cicerio/f008eaeb97f4c8e6b68418b72c4a9488/raw/01477e873b9de749fea6268482c5b2ba82676d7c/mhrice-armor-data.json');
+        // const responseArmor = await fetch('https://gist.githubusercontent.com/Cicerio/f008eaeb97f4c8e6b68418b72c4a9488/raw/01477e873b9de749fea6268482c5b2ba82676d7c/mhrice-armor-data.json');
+        const responseArmor = await fetch(import.meta.env.BASE_URL + 'game_data/mhrice-armor-data.json');
+        
         const jsonDataArmor = await responseArmor.json();
+        console.log("armorResponse: " + jsonDataArmor)
         setArmorData(jsonDataArmor);
       } catch (error) {
         console.error('Error fetching data:', error);
