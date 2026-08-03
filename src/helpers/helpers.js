@@ -134,6 +134,152 @@ export function getIconURL(stat) {
   } 
 
 }
+// --- Armor series list (rank-tabbed equipment picker) ---
+// The raw armor_series -> armor_series_name_msg name table is shifted +2 relative to the
+// stat data for a wide range of series (confirmed by cross-checking against real in-game sets
+// via each series' own Head piece name, which is resolved through a separate id space —
+// pl_armor_id — and is reliable). See armorSeriesName/anyArmorPieceName below.
+const ARMOR_PIECE_TABLES = {
+  Head: ['armor_head_name_msg', 'armor_head_name_msg_mr'],
+  Chest: ['armor_chest_name_msg', 'armor_chest_name_msg_mr'],
+  Arm: ['armor_arm_name_msg', 'armor_arm_name_msg_mr'],
+  Waist: ['armor_waist_name_msg', 'armor_waist_name_msg_mr'],
+  Leg: ['armor_leg_name_msg', 'armor_leg_name_msg_mr'],
+};
+const ARMOR_ICON_FILE_TYPES = { Head: 'Head', Chest: 'Chest', Arm: 'Arms', Waist: 'Waist', Leg: 'Legs' };
+// Series confirmed correct in-game despite failing the name/piece word-overlap check (thematic/
+// synonym naming the check can't catch, e.g. "Lucent" vs "Lambent Casque").
+const ARMOR_CONFIRMED_CORRECT = new Set([419, 420, 431, 441]);
+
+function isUsableArmorName(name) {
+  return !!name && name.trim() !== '' && !name.includes('Rejected');
+}
+
+function armorSeriesName(armorData, id) {
+  const key = 'ArmorSeries_Hunter_' + convertToThreeDigits(id);
+  const base = armorData.armor_series_name_msg.entries.find(e => e.name === key);
+  if (isUsableArmorName(base?.content[1])) return base.content[1];
+  const mr = armorData.armor_series_name_msg_mr.entries.find(e => e.name === key);
+  return isUsableArmorName(mr?.content[1]) ? mr.content[1] : null;
+}
+
+// Tries Head first, then falls back through Chest/Arm/Waist/Leg for series missing a Head
+// piece (e.g. Jaggi S is Arm+Leg only), skipping any piece whose name is blank/unlocalized.
+function anyArmorPieceName(armorData, seriesId) {
+  for (const type of ['Head', 'Chest', 'Arm', 'Waist', 'Leg']) {
+    const piece = armorData.armor.param.find(p => p.series === seriesId && p.pl_armor_id[type] != null);
+    if (!piece) continue;
+    const key = 'A_' + type + '_' + convertToThreeDigits(piece.pl_armor_id[type]) + '_Name';
+    const [baseTable, mrTable] = ARMOR_PIECE_TABLES[type];
+    const base = armorData[baseTable].entries.find(e => e.name === key);
+    if (isUsableArmorName(base?.content[1])) return { type, name: base.content[1] };
+    const mr = armorData[mrTable].entries.find(e => e.name === key);
+    if (isUsableArmorName(mr?.content[1])) return { type, name: mr.content[1] };
+  }
+  return null;
+}
+
+function normalizeArmorName(str) {
+  return str.toLowerCase().replace(/'s\b/g, '').replace(/[^a-z0-9]/g, '');
+}
+function armorNameRelatesToPiece(seriesName, pieceName) {
+  if (!seriesName || !pieceName) return false;
+  const s = normalizeArmorName(seriesName);
+  const firstWord = normalizeArmorName(pieceName.split(' ')[0]);
+  const p = normalizeArmorName(pieceName);
+  if (!firstWord) return false;
+  return s.includes(firstWord) || p.includes(s);
+}
+
+// Layered Armor (cosmetic-only skins, no gameplay stats) share a data signature: their
+// armor.param pieces are all dummy zero-stat placeholders (def 0, no skills) — the real
+// cosmetic data lives in the separate `overwear` table instead. Verified 1:1 against every
+// series carrying an overwear.param entry. Not all Layered sets are flagged is_collabo, so
+// this check catches official ones (e.g. Harp Crown, Azure) that the collab filter misses.
+function isLayeredOrStatless(armorData, seriesId) {
+  const pieces = armorData.armor.param.filter(p => p.series === seriesId);
+  if (pieces.length === 0) return true;
+  return pieces.every(p => p.def_val === 0 && p.skill_list.every(sk => sk === 'None'));
+}
+
+/**
+ * Builds the rank-tabbed armor series list for the equipment picker: { Lower, Upper, Master },
+ * each an array of { id, name, rarity } sorted by rarity ascending then unlock order, with the
+ * known name/stat-table misalignment corrected and unnamed/collab/Layered Armor series dropped
+ * (Layered Armor is cosmetic-only and has no gameplay stats — not useful for a stats-based tool).
+ * @param {Object} armorData - Full raw armor JSON data
+ * @return {{Lower: Array, Upper: Array, Master: Array}}
+ */
+export function getArmorSeriesList(armorData) {
+  if (!armorData) return { Lower: [], Upper: [], Master: [] };
+
+  const rarityBySeries = {};
+  armorData.armor.param.forEach(p => { rarityBySeries[p.series] = p.rare; });
+
+  const rawSeries = armorData.armor_series.param.filter(s =>
+    !(s.armor_series === 0 && s.index === 0 && s.overwear_sort_index === 0)
+  );
+
+  let rows = rawSeries.map(s => {
+    const id = s.armor_series;
+    const piece = anyArmorPieceName(armorData, id);
+    return {
+      id,
+      name: armorSeriesName(armorData, id),
+      group: s.difficulty_group,
+      index: s.index,
+      collab: s.is_collabo,
+      rarity: rarityBySeries[id] != null ? rarityBySeries[id] : null,
+      headPieceName: piece ? piece.name : null,
+    };
+  });
+
+  rows.forEach(r => {
+    if (ARMOR_CONFIRMED_CORRECT.has(r.id)) return;
+    if (!r.name || !armorNameRelatesToPiece(r.name, r.headPieceName)) {
+      const candidate = armorSeriesName(armorData, r.id + 2);
+      if (candidate && armorNameRelatesToPiece(candidate, r.headPieceName)) {
+        r.name = candidate;
+      } else if (!r.name) {
+        r.name = null;
+      }
+    }
+  });
+
+  rows = rows.filter(r => r.name && !r.collab && !isLayeredOrStatless(armorData, r.id));
+
+  const groups = { Lower: [], Upper: [], Master: [] };
+  rows.forEach(r => { if (groups[r.group]) groups[r.group].push(r); });
+  const rarityKey = r => (r.rarity != null ? r.rarity : Infinity);
+  Object.keys(groups).forEach(g => groups[g].sort((a, b) => (rarityKey(a) - rarityKey(b)) || (a.index - b.index)));
+  return groups;
+}
+
+/**
+ * Returns the up-to-5 armor.param entries (Head/Chest/Arm/Waist/Leg) belonging to one
+ * armor_series id, each carrying its own pl_armor_id — the id actually used to equip a piece.
+ * @param {Object} armorData - Full raw armor JSON data
+ * @param {number} seriesId - armor_series id
+ * @return {Array} armor.param entries for that series
+ */
+export function getArmorSeriesPieces(armorData, seriesId) {
+  return armorData ? armorData.armor.param.filter(p => p.series === seriesId) : [];
+}
+
+/**
+ * Icon path for one armor piece slot at a given rarity, using the generic rarity-based icon
+ * set (not a per-set unique icon). Rarities above 8 fall back to the rarity-8 icon since no
+ * higher-rarity assets exist yet.
+ * @param {"Head"|"Chest"|"Arm"|"Waist"|"Leg"} type
+ * @param {number} rarity
+ * @return {string}
+ */
+export function getArmorPieceIconURL(type, rarity) {
+  const fileType = ARMOR_ICON_FILE_TYPES[type];
+  const clampedRarity = Math.min(rarity || 1, 8);
+  return `icons/MH-Icons/Armor/${fileType}-Rarity-${clampedRarity}.png`;
+}
+
 export function isValidJSON(jsonString) {
   try {
       JSON.parse(jsonString);

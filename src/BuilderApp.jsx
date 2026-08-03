@@ -8,6 +8,7 @@ import PopupWindow from './components/PopupWindow';
 import WeaponBlock from './components/WeaponBlock';
 import ArmorBlock from './components/ArmorBlock';
 import SelectionGrid from './components/SelectionGrid';
+import ArmorPicker from './components/ArmorPicker';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
 import { faTemperatureLow } from '@fortawesome/free-solid-svg-icons';
@@ -346,22 +347,31 @@ export default function BuilderApp() {
     }, 3000);
   };
   /**
-   * Toggles the Save/Load popup open/closed.
+   * Toggles the Save/Load popup open/closed. Closes the weapon/equipment popups first —
+   * all three now render in the same inline panel slot, so only one can be open at a time.
    */
   const toggleSaveWindowState = () => {
+    setIsWeaponWindowOpen(false);
+    setIsEquipWindowOpen(false);
     setIsSaveWindowOpen(!isSaveWindowOpen);
   }
   /**
-   * Toggles the weapon selection popup open/closed.
+   * Toggles the weapon selection popup open/closed. Closes the save/equipment popups first —
+   * all three now render in the same inline panel slot, so only one can be open at a time.
    */
   const toggleWeaponWindowState = () => {
+    setIsSaveWindowOpen(false);
+    setIsEquipWindowOpen(false);
     setIsWeaponWindowOpen(!isWeaponWindowOpen);
   }
 
   /**
-   * Toggles the equipment selection popup open/closed.
+   * Toggles the equipment selection popup open/closed. Closes the save/weapon popups first —
+   * all three now render in the same inline panel slot, so only one can be open at a time.
    */
   const toggleEquipWindowState = () => {
+    setIsSaveWindowOpen(false);
+    setIsWeaponWindowOpen(false);
     setIsEquipWindowOpen(!isEquipWindowOpen);
   }
   /**
@@ -557,6 +567,16 @@ export default function BuilderApp() {
           <FontAwesomeIcon icon={faFloppyDisk} />
         </div>
       </div>
+      {/* Desktop header bar: app title + save button, replaces the floating save button and gives the grid content room to breathe from the top of the screen */}
+      {isEverythingSelected &&
+        <header className='app-header'>
+          <h1 className='app-title'>The Equipment Box</h1>
+          <div className='desktop-save-button' onClick={() => toggleSaveWindowState()}>
+            <span className='desktop-save-label'>Save/Load</span>
+            <FontAwesomeIcon icon={faFloppyDisk} />
+          </div>
+        </header>
+      }
       {/* Equipment tab: weapon slot + 5 armor slots. Clicking a block opens the matching selection popup. */}
       {(isEquipmentSelected || isEverythingSelected) && (
         <section className='gear-container'>
@@ -685,13 +705,8 @@ export default function BuilderApp() {
         )}
         {/* <button onClick={() => addRandomBuild()}>Click here to add a random build!</button> */}
       </section>
-      {isEverythingSelected && 
-      <div className='desktop-save-button' onClick={() => toggleSaveWindowState()}>
-        <FontAwesomeIcon icon={faFloppyDisk} />
-      </div>
-      }
       {/* Save tab popup */}
-      <PopupWindow isOpen={isSaveWindowOpen} setIsOpen={setIsSaveWindowOpen} windowHeader={"Save / Load"}>
+      <PopupWindow className="equip-window-panel" isOpen={isSaveWindowOpen} setIsOpen={setIsSaveWindowOpen} windowHeader={"Save / Load"}>
         <div
           className='save-window'>
           <hr />
@@ -718,15 +733,15 @@ export default function BuilderApp() {
         </div>
       </PopupWindow>
       {/* Weapon tab popup */}
-      <PopupWindow  isOpen={isWeaponWindowOpen} setIsOpen={setIsWeaponWindowOpen} windowHeader={"Select Weapon"}>
+      <PopupWindow className="equip-window-panel" isOpen={isWeaponWindowOpen} setIsOpen={setIsWeaponWindowOpen} windowHeader={"Select Weapon"}>
         <div className='weapon-window'>
           <SelectionGrid type="weapon" data={weaponData} onClick={handleWeaponClick}></SelectionGrid>
         </div>
       </PopupWindow>
       {/* Equipment tab popup */}
-      <PopupWindow  isOpen={isEquipWindowOpen} setIsOpen={setIsEquipWindowOpen} windowHeader={"Select your equipment!"}>
+      <PopupWindow className="equip-window-panel" isOpen={isEquipWindowOpen} setIsOpen={setIsEquipWindowOpen} windowHeader={"Select your equipment!"}>
         <div className='equip-window'>
-          <SelectionGrid type="equipment" data={armorData} onClick={handleEquipmentClick}></SelectionGrid>
+          <ArmorPicker data={armorData} onClick={handleEquipmentClick}></ArmorPicker>
         </div>
       </PopupWindow>
     </main>

@@ -18,6 +18,7 @@ Features:
   - Armors probably wanna be sorted by LR, HR, and MR - Need 3 tabs with them.
 * Write detailed tooltips for stats and weapons.
   - They are written! Need to find and display them.
+* ART - Make Ailment icons
 
 * Add support for Sunbreak armors, - INCOMPLETE - WIP
     - Maybe even have a Sunbreak-Iceborne mode swapping - After finishing sunbreak support

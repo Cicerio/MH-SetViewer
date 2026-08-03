@@ -4,7 +4,7 @@ import "../css/PopupWindow.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
-export default function PopupWindow({ children, isOpen, setIsOpen, windowHeader }) {
+export default function PopupWindow({ children, isOpen, setIsOpen, windowHeader, className }) {
   const wrapperRef = useRef(null);
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export default function PopupWindow({ children, isOpen, setIsOpen, windowHeader 
   return (
     <>
       {isOpen && (
-        <div ref={wrapperRef} className="popup-window">
+        <div ref={wrapperRef} className={"popup-window" + (className ? ' ' + className : '')}>
           <div className='popup-header'>
             <h4 className='popup-header-text'>{windowHeader}</h4>
             <button className="close-button" onClick={() => setIsOpen(false)}>
