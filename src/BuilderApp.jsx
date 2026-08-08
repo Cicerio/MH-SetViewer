@@ -51,6 +51,8 @@ export default function BuilderApp() {
   // prevArmorIDs: snapshot of armorIDs before the latest change, used to figure out which slot(s) just changed (see armorIDs effect below)
   const [prevArmorIDs, setPrevArmorIDs] = useState([null, null, null, null, null]);
   const [armorNames, setArmorNames] = useState(['', '', '', '', ''])
+  // per-slot rarity (1-10), used to pick which recolored icon to show for each equipped piece
+  const [armorRarities, setArmorRarities] = useState([1, 1, 1, 1, 1]);
   // per-slot elemental/raw defense values, summed into totalDefenses below
   const [armorDefenses, setArmorDefenses] = useState([
     {
@@ -199,6 +201,7 @@ export default function BuilderApp() {
     console.log(changedArmorIDs);
     console.log(armorIDs);
     let newDefensesBlock = armorDefenses;
+    let newRaritiesBlock = [...armorRarities];
     changedArmorIDs.forEach((index) => {
       if (changedArmorIDs[index] != null) {
         console.log(`ArmorID at index ${index} has changed to ${armorIDs[index]}`);
@@ -213,10 +216,14 @@ export default function BuilderApp() {
             dragon: armorBaseData.dragon_reg_val,
           }
           newDefensesBlock[index] = newDefenses;
+          newRaritiesBlock[index] = armorBaseData.rare;
+        } else {
+          newRaritiesBlock[index] = 1;
         }
       }
     });
     setArmorDefenses(newDefensesBlock);
+    setArmorRarities(newRaritiesBlock);
     if (newDefensesBlock) {
       const compressedDefenses = newDefensesBlock.reduce((acc, obj) => {
         Object.keys(obj).forEach((key) => {
@@ -582,15 +589,15 @@ export default function BuilderApp() {
         <section className='gear-container'>
           <WeaponBlock onClick={toggleWeaponWindowState} weapType={weaponType} name={weaponName}
             onClose={() => handleCloseButton(1)} onInfo={() => handleInfoButton(1)} />
-          <ArmorBlock armorType={"head"} name={armorNames[0]} onClick={toggleEquipWindowState}
+          <ArmorBlock armorType={"head"} name={armorNames[0]} rarity={armorRarities[0]} onClick={toggleEquipWindowState}
             onClose={() => handleCloseButton(2, 0)} onInfo={() => handleInfoButton(2, 0)} />
-          <ArmorBlock armorType={"chest"} name={armorNames[1]} onClick={toggleEquipWindowState}
+          <ArmorBlock armorType={"chest"} name={armorNames[1]} rarity={armorRarities[1]} onClick={toggleEquipWindowState}
             onClose={() => handleCloseButton(2, 1)} onInfo={() => handleInfoButton(2, 1)} />
-          <ArmorBlock armorType={"arms"} name={armorNames[2]} onClick={toggleEquipWindowState}
+          <ArmorBlock armorType={"arms"} name={armorNames[2]} rarity={armorRarities[2]} onClick={toggleEquipWindowState}
             onClose={() => handleCloseButton(2, 2)} onInfo={() => handleInfoButton(2, 2)} />
-          <ArmorBlock armorType={"waist"} name={armorNames[3]} onClick={toggleEquipWindowState}
+          <ArmorBlock armorType={"waist"} name={armorNames[3]} rarity={armorRarities[3]} onClick={toggleEquipWindowState}
             onClose={() => handleCloseButton(2, 3)} onInfo={() => handleInfoButton(2, 3)} />
-          <ArmorBlock armorType={"legs"} name={armorNames[4]} onClick={toggleEquipWindowState}
+          <ArmorBlock armorType={"legs"} name={armorNames[4]} rarity={armorRarities[4]} onClick={toggleEquipWindowState}
             onClose={() => handleCloseButton(2, 4)} onInfo={() => handleInfoButton(2, 4)} />
         </section>
       )}

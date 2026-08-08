@@ -204,9 +204,10 @@ function isLayeredOrStatless(armorData, seriesId) {
 
 /**
  * Builds the rank-tabbed armor series list for the equipment picker: { Lower, Upper, Master },
- * each an array of { id, name, rarity } sorted by rarity ascending then unlock order, with the
- * known name/stat-table misalignment corrected and unnamed/collab/Layered Armor series dropped
- * (Layered Armor is cosmetic-only and has no gameplay stats — not useful for a stats-based tool).
+ * each an array of { id, name, rarity, collab } sorted by rarity ascending then unlock order,
+ * with the known name/stat-table misalignment corrected. Collab sets are included alongside
+ * regular ones (grouped by their normal rank, not separated out) as long as they have real
+ * stats; unnamed and Layered Armor series (cosmetic-only, no gameplay stats) are always dropped.
  * @param {Object} armorData - Full raw armor JSON data
  * @return {{Lower: Array, Upper: Array, Master: Array}}
  */
@@ -246,7 +247,10 @@ export function getArmorSeriesList(armorData) {
     }
   });
 
-  rows = rows.filter(r => r.name && !r.collab && !isLayeredOrStatless(armorData, r.id));
+  // Collab sets are kept (mixed into their normal Lower/Upper/Master group by difficulty_group,
+  // same as any other set) as long as they carry real stats — only unnamed and Layered Armor
+  // (cosmetic-only) series are dropped.
+  rows = rows.filter(r => r.name && !isLayeredOrStatless(armorData, r.id));
 
   const groups = { Lower: [], Upper: [], Master: [] };
   rows.forEach(r => { if (groups[r.group]) groups[r.group].push(r); });
@@ -268,16 +272,14 @@ export function getArmorSeriesPieces(armorData, seriesId) {
 
 /**
  * Icon path for one armor piece slot at a given rarity, using the generic rarity-based icon
- * set (not a per-set unique icon). Rarities above 8 fall back to the rarity-8 icon since no
- * higher-rarity assets exist yet.
+ * set (not a per-set unique icon).
  * @param {"Head"|"Chest"|"Arm"|"Waist"|"Leg"} type
  * @param {number} rarity
  * @return {string}
  */
 export function getArmorPieceIconURL(type, rarity) {
   const fileType = ARMOR_ICON_FILE_TYPES[type];
-  const clampedRarity = Math.min(rarity || 1, 8);
-  return `icons/MH-Icons/Armor/${fileType}-Rarity-${clampedRarity}.png`;
+  return `icons/MH-Icons/Armor/${fileType}-Rarity-${rarity || 1}.svg`;
 }
 
 export function isValidJSON(jsonString) {

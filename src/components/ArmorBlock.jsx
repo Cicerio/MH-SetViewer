@@ -3,18 +3,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGripLinesVertical } from '@fortawesome/free-solid-svg-icons'
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
-function getEquipIcon(armorType) {
+function getEquipIcon(armorType, rarity = 1) {
   switch (armorType) {
     case "head":
-      return "icons/MH-Icons/Armor/Head-Rarity-1.png";
+      return `icons/MH-Icons/Armor/Head-Rarity-${rarity}.svg`;
     case "chest":
-      return "icons/MH-Icons/Armor/Chest-Rarity-1.png";
+      return `icons/MH-Icons/Armor/Chest-Rarity-${rarity}.svg`;
     case "arms":
-      return "icons/MH-Icons/Armor/Arms-Rarity-1.png"
+      return `icons/MH-Icons/Armor/Arms-Rarity-${rarity}.svg`;
     case "waist":
-      return "icons/MH-Icons/Armor/Waist-Rarity-1.png"
+      return `icons/MH-Icons/Armor/Waist-Rarity-${rarity}.svg`;
     case "legs":
-      return "icons/MH-Icons/Armor/Legs-Rarity-1.png"
+      return `icons/MH-Icons/Armor/Legs-Rarity-${rarity}.svg`;
   }
 
 }
@@ -41,7 +41,7 @@ export default function ArmorBlock({ onClick, onClose, onInfo = null, ...props }
       <div className="gearItem-container" onClick={onClick}>
         <div className="item-container">
           <div className="slot-icon">
-            <img alt="slot icon" src={getEquipIcon(props.armorType)}></img>
+            <img alt="slot icon" src={getEquipIcon(props.armorType, props.rarity)}></img>
           </div>
           <div className="selected-item">
             {props.name && (<>{props.name}</>)}
