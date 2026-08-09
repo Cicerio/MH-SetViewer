@@ -87,9 +87,7 @@ export function getWeaponIconURL(type, rarity) {
     case 9:
 
     case 10: // Charge Blade
-      return ("icons/MH-Icons/Weapons/ChargeBlade-Rarity-"
-        + rarity +
-        (rarity !== 1 ? ".png" : ".svg"));
+      return "icons/MH-Icons/Weapons/ChargeBlade-Rarity-" + (rarity || 1) + ".svg";
     case 11:
 
     case 12:

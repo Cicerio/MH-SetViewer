@@ -33,7 +33,7 @@ export default function WeaponBlock({onClick, onClose, onInfo, ...props}) {
       <div className="gearItem-container" onClick={onClick}>
         <div className="item-container">
           <div className="slot-icon">
-            <img alt="slot icon" src={getWeaponIconURL(props.weapType, 1)}></img>
+            <img alt="slot icon" src={getWeaponIconURL(props.weapType, props.rarity)}></img>
           </div>
           {props.name && (
             <div className="selected-item">

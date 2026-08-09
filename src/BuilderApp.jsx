@@ -587,7 +587,7 @@ export default function BuilderApp() {
       {/* Equipment tab: weapon slot + 5 armor slots. Clicking a block opens the matching selection popup. */}
       {(isEquipmentSelected || isEverythingSelected) && (
         <section className='gear-container'>
-          <WeaponBlock onClick={toggleWeaponWindowState} weapType={weaponType} name={weaponName}
+          <WeaponBlock onClick={toggleWeaponWindowState} weapType={weaponType} rarity={weaponBaseStats.rarity} name={weaponName}
             onClose={() => handleCloseButton(1)} onInfo={() => handleInfoButton(1)} />
           <ArmorBlock armorType={"head"} name={armorNames[0]} rarity={armorRarities[0]} onClick={toggleEquipWindowState}
             onClose={() => handleCloseButton(2, 0)} onInfo={() => handleInfoButton(2, 0)} />

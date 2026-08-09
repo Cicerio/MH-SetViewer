@@ -8,7 +8,9 @@
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "icons:armor": "node scripts/icons/gen-armor-icons.mjs"
+    "icons:armor": "node scripts/icons/gen-armor-icons.mjs",
+    "icons:weapons": "node scripts/icons/gen-weapon-icons.mjs",
+    "icons": "npm run icons:armor && npm run icons:weapons"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
