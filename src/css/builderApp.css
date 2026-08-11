@@ -160,6 +160,17 @@ ul.striped>li:not(.element-defenses) {
   padding: 2px;
 }
 
+/* The sharpness bar's fixed-px width can outgrow the "Sharpness" column at these widths
+   (the 700-1725px desktop layout squeezes the stats panel into 1 of 5 grid columns, and
+   1725/5 = 345, so the same crowding reappears below 345px in the single-column mobile
+   layout). Drop the bar onto its own row under the label instead of clipping it. */
+@media screen and (min-width: 700px) and (max-width: 1725px),
+       screen and (max-width: 344.98px) {
+  ul.striped>li.sharpness-row {
+    grid-template-columns: auto;
+  }
+}
+
 ul.striped>li:nth-child(even) {
   background-color: var(--russian-violet-lite);
 }

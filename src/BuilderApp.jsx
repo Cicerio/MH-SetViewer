@@ -105,6 +105,8 @@ export default function BuilderApp() {
     ice: null,
     dragon: null,
   })
+  // sharpColor: Simply sharpness colors listed for Red to Purple.
+  const sharpColor = ["Red", "Orange", "Yellow", "Green", "Blue", "White", "Purple"];
 
   // jsonCode: the "build code" string (JSON of {weaponID, armorIDs}) shown/edited in the Save/Load popup.
   // It's kept in sync both ways: weaponID/armorIDs changes regenerate it, and pasting a new value re-parses it back into state (see effects below).
@@ -640,13 +642,14 @@ export default function BuilderApp() {
                   </li>
                 }
                 {weaponBaseStats.sharpness_block != null &&
-                  <li>
+                  <li className="sharpness-row">
                     <span>Sharpness</span>
-                    {/* Renders one colored segment per sharpness level (red/orange/.../purple), width scaled from its raw hit count */}
+                    {/* Renders one colored segment per sharpness level (red/orange/.../purple), width scaled from its raw hit count. 
+                        Also gives them tooltips for exact number of hits.*/}
                     <div className='sharpness-bar sharpness-statgrid'>
                       <img src={getIconURL("swordhilt")} alt="Sword hilt" className='swordhilt' onError={getIconURL()}/>
                       {weaponBaseStats.sharpness_block.map((number, index) => (
-                        <span key={index} className={`sharp-val-${index + 1}`} style={{ width: `${number * 0.75}px` }}>
+                        <span key={index} className={`sharp-val-${index + 1}`} style={{ width: `${number * 0.5}px` }} title={sharpColor[index] + ": "+ number}>
                         </span>
                       ))}
                     </div>
