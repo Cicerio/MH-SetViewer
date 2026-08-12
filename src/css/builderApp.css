@@ -175,14 +175,32 @@ ul.striped>li:nth-child(even) {
   background-color: var(--russian-violet-lite);
 }
 
-div.sharpness-statgrid,
+div.sharpness-bar-stack.sharpness-statgrid,
 .swordhilt {
-  height: 16px !important;
+  height: 20px !important;
   align-self: center;
 }
 
-div.sharpness-statgrid>span {
-  height: 10px !important;
+div.sharpness-bar-stack {
+  display: flex;
+  flex-direction: row;
+}
+
+/* The two current/potential rows stacked vertically, each getting half the total height,
+   so they occupy exactly the same space the single-row bar used to. */
+div.sharpness-bar-rows {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+}
+
+div.sharpness-bar-rows>div.sharpness-bar {
+  height: 6px !important;
+}
+
+div.sharpness-bar-rows>div.sharpness-bar>span {
+  height: 8px !important;
   align-self: center;
 }
 

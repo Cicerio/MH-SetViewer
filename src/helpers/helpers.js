@@ -66,6 +66,31 @@ export function getTrueRawAttack(attack, sharpnessBlock) {
   });
   return attack * sharpMod;
 }
+/**
+ * Applies Handicraft's sharpness extension to a base sharpness_val_list, using the
+ * "edge extension" rule: each takumi_val_list value extends the tier at (frontierIndex + i),
+ * where frontierIndex is the last non-zero tier in the base gauge. See docs/handicraft-sharpness.md.
+ * @param {number[]} sharpness - 7-element sharpness_val_list [Red,Orange,Yellow,Green,Blue,White,Purple]
+ * @param {number[]} takumi - 4-element takumi_val_list (Handicraft bonus)
+ * @return {number[]} 7-element array with Handicraft's max bonus applied
+ */
+export function applyHandicraft(sharpness, takumi) {
+  if (!Array.isArray(sharpness) || !Array.isArray(takumi)) {
+    return sharpness;
+  }
+  const result = [...sharpness];
+  const frontier = result.map((v, i) => (v > 0 ? i : -1)).filter(i => i >= 0).pop();
+  if (frontier == null) {
+    return result;
+  }
+  takumi.forEach((bonus, i) => {
+    const idx = frontier + i;
+    if (idx < result.length) {
+      result[idx] += bonus;
+    }
+  });
+  return result;
+}
 export function getWeaponIconURL(type, rarity) {
   switch (type) {
     case 1:

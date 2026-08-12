@@ -1,6 +1,6 @@
 import './css/builderApp.css';
 import React, { useState, useEffect } from 'react';
-import { convertToThreeDigits, getWeaponName, getWeaponBaseData, getIconURL, getEquipmentBaseData, getTrueRawAttack, isValidJSON }
+import { convertToThreeDigits, getWeaponName, getWeaponBaseData, getIconURL, getEquipmentBaseData, getTrueRawAttack, applyHandicraft, isValidJSON }
   from './helpers/helpers';
 
 import InfoTab from './components/InfoTab';
@@ -43,6 +43,7 @@ export default function BuilderApp() {
     element_value: null,
     def_bonus: null,
     sharpness_block: null,
+    takumi_block: null,
   })
 
   const [armorData, setArmorData] = useState(null);
@@ -438,6 +439,7 @@ export default function BuilderApp() {
         element_type: baseWeaponData.base.base.main_element_type,
         element_value: baseWeaponData.base.base.main_element_val,
         sharpness_block: baseWeaponData.base.sharpness_val_list,
+        takumi_block: baseWeaponData.base.takumi_val_list,
       }
       setWeaponBaseStats(newBaseWeaponData);
     }
@@ -455,6 +457,7 @@ export default function BuilderApp() {
       element_value: null,
       def_bonus: null,
       sharpness_block: null,
+      takumi_block: null,
     });
   }
 
@@ -644,14 +647,26 @@ export default function BuilderApp() {
                 {weaponBaseStats.sharpness_block != null &&
                   <li className="sharpness-row">
                     <span>Sharpness</span>
-                    {/* Renders one colored segment per sharpness level (red/orange/.../purple), width scaled from its raw hit count. 
-                        Also gives them tooltips for exact number of hits.*/}
-                    <div className='sharpness-bar sharpness-statgrid'>
+                    {/* Two half-height bars stacked in the same space: the top row is current sharpness,
+                        the bottom row is current + max Handicraft. Since the bottom row is never shorter
+                        than the top, the extra width only shows in the bottom half — reading as a single
+                        bar with a notch cut out of the end for potential Handicraft sharpness. */}
+                    <div className='sharpness-bar-stack sharpness-statgrid'>
                       <img src={getIconURL("swordhilt")} alt="Sword hilt" className='swordhilt' onError={getIconURL()}/>
-                      {weaponBaseStats.sharpness_block.map((number, index) => (
-                        <span key={index} className={`sharp-val-${index + 1}`} style={{ width: `${number * 0.5}px` }} title={sharpColor[index] + ": "+ number}>
-                        </span>
-                      ))}
+                      <div className='sharpness-bar-rows'>
+                        <div className='sharpness-bar'>
+                          {weaponBaseStats.sharpness_block.map((number, index) => (
+                            <span key={index} className={`sharp-val-${index + 1}`} style={{ width: `${number * 0.5}px` }} title={sharpColor[index] + ": " + number}>
+                            </span>
+                          ))}
+                        </div>
+                        <div className='sharpness-bar'>
+                          {applyHandicraft(weaponBaseStats.sharpness_block, weaponBaseStats.takumi_block).map((number, index) => (
+                            <span key={index} className={`sharp-val-${index + 1}`} style={{ width: `${number * 0.5}px` }} title={sharpColor[index] + " (max Handicraft): " + number}>
+                            </span>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   </li>
                 }
