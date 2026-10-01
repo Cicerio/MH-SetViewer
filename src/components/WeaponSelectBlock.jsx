@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import '../css/WeaponSelectBlock.css'
-import { getWeaponBaseData, getWeaponName } from '../helpers/helpers';
+import { getWeaponBaseData, getWeaponName, SHARPNESS_VW_PER_POINT_VAR } from '../helpers/helpers';
 
 export default function WeaponSelectBlock({ weaponID, onClick, data }) {
   const [weaponName, setWeaponName] = useState("");
@@ -44,7 +44,7 @@ export default function WeaponSelectBlock({ weaponID, onClick, data }) {
         <span>Sharpness: </span>
         <div className='sharpness-bar'>
           {sharpnessValues.map((number, index) => (
-            <span key={index} className={`sharp-val-${index + 1}`} style={{ width: `${number * 0.5}px` }}>
+            <span key={index} className={`sharp-val-${index + 1}`} style={{ width: `calc(${number} * ${SHARPNESS_VW_PER_POINT_VAR})` }}>
             </span>
           ))}
         </div>

@@ -42,7 +42,9 @@
 .sharpness-bar{
  display:flex;
  flex-direction: row;
- height:19px
+ height:19px;
+ max-width: 100%;
+ overflow: hidden;
 }
 .sharpness-bar > span{
   background-color: var(--goldenrod);

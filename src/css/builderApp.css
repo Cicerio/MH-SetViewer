@@ -10,6 +10,10 @@
   --plum-web: #f69dedff;
   --isabelline: #efe9e7ff;
   --goldenrod: #d9a939ff;
+  /* Sharpness bar segment width, per sharpness point. This value assumes the desktop
+     layout, where the Stats tab is squeezed into 1/5 of the viewport width — overridden
+     below <700px, where the mobile tab layout instead gives the bar a full-width row. */
+  --sharpness-vw-per-point: 0.025vw;
   background-color: var(--russian-violet);
   color: var(--isabelline);
   font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -171,6 +175,15 @@ ul.striped>li:not(.element-defenses) {
   }
 }
 
+/* Below the 700px breakpoint, the layout swaps from the squeezed 1/5-viewport-width
+   desktop grid to the mobile tab system, where the Stats tab gets a full-width row
+   instead — reset the sharpness bar's scale to take advantage of the extra room. */
+@media screen and (max-width: 699.98px) {
+  :root {
+    --sharpness-vw-per-point: 0.1vw;
+  }
+}
+
 ul.striped>li:nth-child(even) {
   background-color: var(--russian-violet-lite);
 }
@@ -184,6 +197,8 @@ div.sharpness-bar-stack.sharpness-statgrid,
 div.sharpness-bar-stack {
   display: flex;
   flex-direction: row;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 /* The two current/potential rows stacked vertically, each getting half the total height,

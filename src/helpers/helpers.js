@@ -1,4 +1,12 @@
 // A file for commonly used functions
+
+// Sharpness bar segment width scale — a CSS custom property (see builderApp.css's
+// :root and its <700px override) rather than a fixed JS number, so the desktop
+// (squeezed 1/5-viewport-width column) and mobile (full-width tab) layouts can each
+// get an appropriately sized scale without a resize listener. Use with calc(), e.g.
+// `calc(${number} * var(--sharpness-vw-per-point))`.
+export const SHARPNESS_VW_PER_POINT_VAR = 'var(--sharpness-vw-per-point, 0.025vw)';
+
 /**
  * Converts a number to a string representation with at least three digits.
  *
@@ -90,6 +98,24 @@ export function applyHandicraft(sharpness, takumi) {
     }
   });
   return result;
+}
+/**
+ * Builds a single combined tooltip string for one sharpness tier, covering three cases:
+ * unaffected by Handicraft (base === max), extended by Handicraft (base > 0 and max > base),
+ * or entirely created by Handicraft (base is 0 but max > 0).
+ * @param {string} color - tier name, e.g. "Red"
+ * @param {number} base - current (no-Handicraft) hit count for this tier
+ * @param {number} max - hit count for this tier with max Handicraft applied (see applyHandicraft)
+ * @return {string}
+ */
+export function getSharpnessTooltip(color, base, max) {
+  if (base === max) {
+    return `${color}: ${base}`;
+  }
+  if (base > 0) {
+    return `${color}: ${base} (up to ${max})`;
+  }
+  return `${color}: ${max} (Sharp. Enhancements Only)`;
 }
 export function getWeaponIconURL(type, rarity) {
   switch (type) {

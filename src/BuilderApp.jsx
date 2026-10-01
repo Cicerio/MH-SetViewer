@@ -1,6 +1,6 @@
 import './css/builderApp.css';
 import React, { useState, useEffect } from 'react';
-import { convertToThreeDigits, getWeaponName, getWeaponBaseData, getIconURL, getEquipmentBaseData, getTrueRawAttack, applyHandicraft, isValidJSON }
+import { convertToThreeDigits, getWeaponName, getWeaponBaseData, getIconURL, getEquipmentBaseData, getTrueRawAttack, applyHandicraft, getSharpnessTooltip, SHARPNESS_VW_PER_POINT_VAR, isValidJSON }
   from './helpers/helpers';
 
 import InfoTab from './components/InfoTab';
@@ -108,6 +108,11 @@ export default function BuilderApp() {
   })
   // sharpColor: Simply sharpness colors listed for Red to Purple.
   const sharpColor = ["Red", "Orange", "Yellow", "Green", "Blue", "White", "Purple"];
+  // maxSharpness: sharpness_block with max Handicraft applied, used by the bottom sharpness-bar row
+  // and by both rows' tooltips (see getSharpnessTooltip).
+  const maxSharpness = weaponBaseStats.sharpness_block
+    ? applyHandicraft(weaponBaseStats.sharpness_block, weaponBaseStats.takumi_block)
+    : null;
 
   // jsonCode: the "build code" string (JSON of {weaponID, armorIDs}) shown/edited in the Save/Load popup.
   // It's kept in sync both ways: weaponID/armorIDs changes regenerate it, and pasting a new value re-parses it back into state (see effects below).
@@ -656,13 +661,13 @@ export default function BuilderApp() {
                       <div className='sharpness-bar-rows'>
                         <div className='sharpness-bar'>
                           {weaponBaseStats.sharpness_block.map((number, index) => (
-                            <span key={index} className={`sharp-val-${index + 1}`} style={{ width: `${number * 0.5}px` }} title={sharpColor[index] + ": " + number}>
+                            <span key={index} className={`sharp-val-${index + 1}`} style={{ width: `calc(${number} * ${SHARPNESS_VW_PER_POINT_VAR})` }} title={getSharpnessTooltip(sharpColor[index], number, maxSharpness[index])}>
                             </span>
                           ))}
                         </div>
                         <div className='sharpness-bar'>
-                          {applyHandicraft(weaponBaseStats.sharpness_block, weaponBaseStats.takumi_block).map((number, index) => (
-                            <span key={index} className={`sharp-val-${index + 1}`} style={{ width: `${number * 0.5}px` }} title={sharpColor[index] + " (max Handicraft): " + number}>
+                          {maxSharpness.map((number, index) => (
+                            <span key={index} className={`sharp-val-${index + 1}`} style={{ width: `calc(${number} * ${SHARPNESS_VW_PER_POINT_VAR})` }} title={getSharpnessTooltip(sharpColor[index], weaponBaseStats.sharpness_block[index], number)}>
                             </span>
                           ))}
                         </div>
