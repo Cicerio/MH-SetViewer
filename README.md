@@ -44,18 +44,25 @@ Multiple monster hunters on the horizon
   - MHWilds requires two weapons.
 
 + Priority list!
+  + ###TODO - Chestpiece icon has a line through it 
+      - FIX IT and all the rarities (run the rarity script)
   1. Function - Make it work for Rise.
     - QoL Toggle between Select all equipment vs Click head =  only show head and vice versa
+    - Search bar for equipment
     - Add support for every weapon.
       - Various stats for each weapon type.
         + Charge Blade - Phial type
         + Gunlance - Shell type (how many too)
         + Insect Glaive - Add slot for Bug Buddy and give accompanying stats
-        + Bowguns - oh boy
+        + Bows and guns - oh boy
           * Bow - Coatings
           * Bowguns
             - Ammo types
             - Special ammo type
+    + ARMOR SKILLS!
+      + Have them actually exist
+        + Probably display right under as a dropdown
+        + Let them affect stats! Show what they're affecting in details
   2. Make it work for different games.
     - Wilds and World skills work mostly the same
       - MH4U and GU have different skill type
